@@ -3,19 +3,8 @@ Just a team of 7 mortals making projects for the freshman year in Vietnamese-Ger
 
 2023.07.06 A simple AI testing (webcam) photos to check for green backpacks.
 
-Created by:
+Collectively created by:
 
-Tran Manh Duc  
+<i>Tran Manh Duc, Truong Thanh Hai, Luu Huynh Phuc Hau, Nguyen Do Quynh Nguyen,
 
-Truong Thanh Hai
-
-Luu Huynh Phuc Hau   
-
-Nguyen Do Quynh Nguyen
-
-Pham Quang Dung
-
-Luu Danh Thanh Khoi
-
-Nguyen Huu Oanh
-
+  Pham Quang Dung, Luu Danh Thanh Khoi, Nguyen Huu Oanh</i>
