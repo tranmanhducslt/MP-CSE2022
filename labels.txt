@@ -1,0 +1,2 @@
+0 no_bag
+1 yes_bag
