@@ -2,7 +2,7 @@
 Just a team of 7 mortals making projects for the freshman year in Vietnamese-German University.
 
 # Activity
-2023.07.06 A simple AI testing (webcam) photos to check for green backpacks.
+2023.06.07 A simple AI testing (webcam) photos to check for green backpacks.
 
 # Collaborators
 Tran Manh Duc
