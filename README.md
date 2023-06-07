@@ -1,10 +1,20 @@
-# MP-CSE2022
+# Introduction
 Just a team of 7 mortals making projects for the freshman year in Vietnamese-German University.
 
+# Activity
 2023.07.06 A simple AI testing (webcam) photos to check for green backpacks.
 
-<i>Collectively created by:
+# Collaborators
+Tran Manh Duc
 
-Tran Manh Duc, Truong Thanh Hai, Luu Huynh Phuc Hau, Nguyen Do Quynh Nguyen,
+Truong Thanh Hai
 
-  Pham Quang Dung, Luu Danh Thanh Khoi, Nguyen Huu Oanh</i>
+Luu Huynh Phuc Hau
+
+Nguyen Do Quynh Nguyen
+
+Pham Quang Dung
+
+Luu Danh Thanh Khoi
+
+Nguyen Huu Oanh
