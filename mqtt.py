@@ -21,7 +21,7 @@ def message(client , feed_id , payload):
 
 client = MQTTClient(AIO_USERNAME , AIO_KEY)
 
-client.on_connect = connected  #function pointer
+client.on_connect = connected # function pointer
 client.on_disconnect = disconnected
 client.on_message = message
 client.on_subscribe = subscribe
@@ -30,8 +30,8 @@ client.connect()
 client.loop_background()
 
 while True:
-    time.sleep(5)
-    client.publish("sensor1", 1)
-    client.publish("sensor2", 1)
-    client.publish("sensor3", 1)
+    time.sleep(5) # updating every 5 sec
+    client.publish("sensor1", 30)
+    client.publish("sensor2", 75)
+    client.publish("sensor3", 6.5)
     pass
