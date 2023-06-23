@@ -3,7 +3,7 @@ import time
 import random
 from Adafruit_IO import MQTTClient
 AIO_USERNAME = "tranmanhducslt"
-AIO_KEY = "aio_upPW44jE4EKmD4ovWV32ovyTcgI9"
+AIO_KEY = "aio_hwXw01qIzmbnzfl1Ddx1XXnhSwIQ"
 
 def connected(client):
     print("Server connected ...")
