@@ -1,5 +1,6 @@
 import sys
 import time
+import random
 from Adafruit_IO import MQTTClient
 AIO_USERNAME = "tranmanhducslt"
 AIO_KEY = "aio_gzFr73SfOPcAsmzY6lNNOMEfM1j7"
@@ -31,7 +32,7 @@ client.loop_background()
 
 while True:
     time.sleep(5) # updating every 5 sec
-    client.publish("sensor1", 30)
-    client.publish("sensor2", 75)
-    client.publish("sensor3", 6.5)
+    client.publish("sensor1", random.randint(25, 35))
+    client.publish("sensor2", random.randint(60, 80))
+    client.publish("sensor3", random.randint(60, 85)/10)
     pass
