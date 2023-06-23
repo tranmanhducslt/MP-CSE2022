@@ -1,12 +1,6 @@
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
-import sys
-from Adafruit_IO import MQTTClient
-
-AIO_USERNAME = "Who_cares"
-AIO_KEY = ""
-client = MQTTClient(AIO_USERNAME , AIO_KEY)
 
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
