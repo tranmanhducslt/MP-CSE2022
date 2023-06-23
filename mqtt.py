@@ -33,7 +33,7 @@ client.loop_background()
 
 while True:
     time.sleep(10) # updating every interval
-    client.publish("sensor1", random.randint(25, 35))
-    client.publish("sensor2", random.randint(60, 85))
-    client.publish("sensor3", random.randint(60, 85)/10)
+    client.publish("sensor1", random.randint(25, 70))
+    client.publish("sensor2", random.randint(0, 1000))
+    client.publish("sensor3", random.randint(0, 100)
     pass
