@@ -32,7 +32,7 @@ client.connect()
 client.loop_background()
 
 while True:
-    time.sleep(5) # updating every 5 seconds
+    time.sleep(10) # updating every interval
     client.publish("sensor1", random.randint(25, 35))
     client.publish("sensor2", random.randint(60, 85))
     client.publish("sensor3", random.randint(60, 85)/10)
