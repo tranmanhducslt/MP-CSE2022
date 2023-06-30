@@ -4,6 +4,7 @@ import random
 from Adafruit_IO import MQTTClient
 AIO_USERNAME = "Who_cares"
 AIO_KEY = ""
+global_equation = "x1 + x2 + x3"
 
 def connected(client):
     print("Server connected ...")
@@ -20,6 +21,10 @@ def disconnected(client):
 
 def message(client , feed_id , payload):
     print("Received: " + payload)
+    if (feed_id == "equation"):
+        global global_equation
+        global_equation = payload
+        print(global_equation)
 
 client = MQTTClient(AIO_USERNAME , AIO_KEY)
 
