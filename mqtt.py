@@ -4,7 +4,7 @@ import random
 import requests
 from Adafruit_IO import MQTTClient
 AIO_USERNAME = "tranmanhducslt"
-AIO_KEY = "aio_DsIK68UqR6ygoB76EL6IKsObQzxn"
+AIO_KEY = "aio_xpYz27A2GrCpMePrNLJvybOISRVP"
 global_equation = "x1 + x2 + x3"
 
 def init_global_equation():
