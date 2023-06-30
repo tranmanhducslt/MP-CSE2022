@@ -47,7 +47,7 @@ client.on_connect = connected # function pointer/callback
 client.on_disconnect = disconnected
 client.on_message = message
 client.on_subscribe = subscribe
-# meaning: on_cue = call function
+# meaning: .on_cue = call function
 
 client.connect()
 client.loop_background()
@@ -59,4 +59,3 @@ while True:
     client.publish("sensor2", random.randint(60, 80))
     client.publish("sensor3", random.randint(60, 80)/10)
     print(modify(random.randint(1,10), random.randint(1,10), random.randint(1,10)))
-    pass
