@@ -9,6 +9,7 @@ def connected(client):
     print("Server connected ...")
     client.subscribe("button1")
     client.subscribe("button2")
+    client.subscribe("equation")
 
 def subscribe(client , userdata , mid , granted_qos):
     print("Subscribed!")
