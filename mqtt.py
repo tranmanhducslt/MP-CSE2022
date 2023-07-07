@@ -3,8 +3,9 @@ import time
 import random
 import requests
 from Adafruit_IO import MQTTClient
-AIO_USERNAME = "tranmanhducslt"
-AIO_KEY = "aio_xpYz27A2GrCpMePrNLJvybOISRVP"
+from myserial import *
+AIO_USERNAME = ""
+AIO_KEY = ""
 global_equation = "x1 + x2 + x3"
 
 def init_global_equation():
@@ -21,20 +22,27 @@ def connected(client):
     client.subscribe("button1")
     client.subscribe("button2")
     client.subscribe("equation")
+    client.subscribe("ai")
 
 def subscribe(client , userdata , mid , granted_qos):
     print("Subscribed!")
 
 def disconnected(client):
     print("Disconnected from the server!")
-    sys.exit (1)
+    sys.exit(1)
 
-def message(client , feed_id , payload):
+def message(client, feed_id, payload):
     print("Received: " + payload)
     if (feed_id == "equation"):
         global global_equation
         global_equation = payload
-        print(global_equation)
+        print(global_equation) # meaning: my input will become equation
+    if (feed_id == "button1"):
+        if payload == "0": sendCommand("3") 
+        else: sendCommand("2")
+    if (feed_id == "button2"):
+        if payload == "0": sendCommand("5") 
+        else: sendCommand("4")
 
 def modify(x1, x2, x3):
     global global_equation
@@ -58,4 +66,11 @@ while True:
     client.publish("sensor1", random.randint(25, 40))
     client.publish("sensor2", random.randint(60, 80))
     client.publish("sensor3", random.randint(60, 80)/10)
-    print(modify(random.randint(1,10), random.randint(1,10), random.randint(1,10)))
+
+    san = modify(random.randint(1,10), random.randint(1,10), random.randint(1,10))
+    client.publish("ai", san)
+
+    requestData("0", client)
+    time.sleep(2)
+    requestData("1", client)
+    time.sleep(2)
