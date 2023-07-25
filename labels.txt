@@ -1,2 +1,2 @@
-0 no_bag
-1 yes_bag
+0 farmer
+1 no_farmer
