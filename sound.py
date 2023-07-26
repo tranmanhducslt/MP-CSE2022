@@ -12,8 +12,8 @@ def recognize_speech():
     try:
         # Use Google Web Speech API to recognize the speech
         recognized_text = recognizer.recognize_google(audio)
-        print("You said:", recognized_text)
+        return("You said:", recognized_text)
     except sr.UnknownValueError:
-        print("Sorry, I could not understand what you said.")
+        return("Sorry, I could not understand what you said.")
     except sr.RequestError as e:
-        print("Error occurred during the request to the Google Web Speech API:", e)
+        return("Error occurred during the request to the Google Web Speech API:", e)
