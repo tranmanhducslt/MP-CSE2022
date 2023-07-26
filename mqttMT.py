@@ -7,6 +7,7 @@ import serial.tools.list_ports
 import sys
 from Adafruit_IO import MQTTClient
 from AI import *
+from sound import *
 import requests
 # import sensor
 
