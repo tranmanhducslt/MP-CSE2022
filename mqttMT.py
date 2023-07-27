@@ -12,7 +12,7 @@ import requests
 # import sensor
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_bRGL44VVBaPZBJLHcx7KcPi79ePs"
+AIO_KEY = "aio_uZci06oC3CN0qz92dj1tex8AujKB"
 
 global_equation = "x1 + x2 + x3"
 
@@ -64,9 +64,11 @@ def message(client, feed_id, payload):
 
 try:
     ser = serial.Serial(port="COM4", baudrate=115200)
+    haveport = True
 except:
     print("Cannot open the port")
-    exit()
+    haveport = False
+    # exit()
 
 def sendCommand(cmd):
     ser.write(cmd.encode())
@@ -143,7 +145,13 @@ init_global_equation()
 
 client.publish("info", "Welcome!")
 while True:
-    a = requestData("0") # temp
-    b = requestData("1") # humid    
     time.sleep(2)
+    if haveport:
+        a = requestData("0") # temp
+        b = requestData("1") # humid    
+    else:
+        x1 = random.randint(2500, 3000) / 100
+        x2 = random.randint(4000, 7000) / 100
+        client.publish("Temp", x1)
+        client.publish("Humid", x2)
     pass
