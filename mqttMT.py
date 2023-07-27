@@ -16,13 +16,11 @@ AIO_KEY = "aio_uZci06oC3CN0qz92dj1tex8AujKB"
 
 global_equation = "x1 + x2 + x3"
 
-
 def init_global_equation():
     headers = {}
     aio_url = "https://io.adafruit.com/api/v2/multidisc2023/feeds/equation"
     x = requests.get(url=aio_url, headers=headers, verify=False)
     data = x.json()
-
 
 def connected(client):
     print("Server connected ...")
@@ -131,7 +129,6 @@ def requestData(cmd):
     time.sleep(1)
     readSerial()
 
-
 client = MQTTClient(AIO_USERNAME, AIO_KEY)
 
 client.on_connect = connected
@@ -149,7 +146,7 @@ while True:
     if haveport:
         a = requestData("0") # temp
         b = requestData("1") # humid    
-    else:
+    else: # testing without hardware, no breaching
         x1 = random.randint(2500, 3000) / 100
         x2 = random.randint(4000, 7000) / 100
         client.publish("Temp", x1)
