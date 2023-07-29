@@ -1,18 +1,18 @@
 print("MQTT with Adafruit IO")
 print("Sensors and Actuators")
 
+import threading
 import time
 import random
 import serial.tools.list_ports
 import sys
 from Adafruit_IO import MQTTClient
 from AI import *
-from sound import *
+from voice import *
 import requests
-# import sensor
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_PaSU08kZS1YpXzPrDg5oIYe4TbVL"
+AIO_KEY = "aio_bRGL44VVBaPZBJLHcx7KcPi79ePs"
 
 def connected(client):
     print("Server connected ...")
@@ -28,28 +28,23 @@ def disconnected(client):
     print("Disconnected from the server!")
     sys.exit(1)
 
-
 def message(client, feed_id, payload):
     print("Received: " + payload)
     if feed_id == 'button-for-fan':
-        if recognized_text == "Fan on":
-            payload == "1"
+        if payload == "1":
             print("Turn on the device...")
             sendCommand("2")
             return
-        elif recognized_text == "Fan off":
-            payload == "0"
+        elif payload == "0":
             print('Turn off the device...')
             sendCommand("3")
             return
     if feed_id == 'button-for-light':
-        if recognized_text == "Light on":
-            payload == "1"
+        if payload == "1":
             print("Turn on the device...")
             sendCommand("4")
             return
-        elif recognized_text == "Light off":
-            payload == "0"
+        elif payload == "0":
             print('Turn off the device...')
             sendCommand("5")
             return
@@ -58,11 +53,9 @@ def message(client, feed_id, payload):
 
 try:
     ser = serial.Serial(port="COM4", baudrate=115200)
-    haveport = True
 except:
     print("Cannot open the port")
-    haveport = False
-    # exit()
+    exit()
 
 def sendCommand(cmd):
     ser.write(cmd.encode())
@@ -82,11 +75,11 @@ def processData(data):
     print(splitData)
     if splitData[1] == "T":
         client.publish("Temp", splitData[2])
-        if float(splitData[2]) < 5:
+        if float(splitData[2]) < 25:
             infor("Too cold")
             sendCommand("4")
             infor(startAI())
-        elif float(splitData[2]) > 15:
+        elif float(splitData[2]) > 30:
             infor("Too hot")
             sendCommand("4")
             infor(startAI())
@@ -95,11 +88,11 @@ def processData(data):
     
     elif splitData[1] == "H":
         client.publish("Humid", splitData[2])
-        if float(splitData[2]) < 75:
+        if float(splitData[2]) < 40:
             infor("Too dry")
             sendCommand("2")
             infor(startAI())
-        elif float(splitData[2]) > 90:
+        elif float(splitData[2]) > 70:
             infor("Too humid")
             sendCommand("2")
             infor(startAI())
@@ -125,6 +118,28 @@ def requestData(cmd):
     time.sleep(1)
     readSerial()
 
+def startAI():
+    cam_thread = threading.Thread(target=pre_startAI)
+    cam_thread.start()
+    cam_thread.join()
+
+def speech_recognition_loop():
+    while True:
+        recognized_text = recognize_speech()
+        if recognized_text == "Fan on":
+            sendCommand("2")
+            return
+        elif recognized_text == "Fan off":
+            sendCommand("3")
+            return
+        if recognized_text == "Light on":
+            sendCommand("4")
+            return
+        elif recognized_text == "Light off":
+            sendCommand("5")
+            return
+        print("You said: " + recognized_text)
+
 client = MQTTClient(AIO_USERNAME, AIO_KEY)
 
 client.on_connect = connected
@@ -136,20 +151,14 @@ client.connect()
 client.loop_background()
 
 client.publish("info", "Welcome!")
+
+speech_thread = threading.Thread(target=speech_recognition_loop)
+speech_thread.start()
+
 while True:
+    # Execute requestData() without waiting for the speech thread to finish
+    a = requestData("0")  # temp
+    b = requestData("1")  # humid
+    # Join the speech thread, so the loop waits until the recognition is complete
+    speech_thread.join()
     time.sleep(2)
-    if haveport:
-         # Start a new thread to run recognize_speech()
-        speech_thread = threading.Thread(target=recognize_speech)
-        speech_thread.start()
-        # recognized_text = recognize_speech()
-        a = requestData("0") # temp
-        b = requestData("1") # humid   
-        # Join the speech thread, so the loop waits until the recognition is complete
-        speech_thread.join() 
-    else: # testing without hardware, no breaching
-        x1 = random.randint(500, 1500) / 100
-        x2 = random.randint(7500, 9000) / 100
-        client.publish("Temp", x1)
-        client.publish("Humid", x2)
-    pass
