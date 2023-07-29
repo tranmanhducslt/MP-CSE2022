@@ -23,7 +23,6 @@ def connected(client):
 def subscribe(client, userdata, mid, granted_qos):
     print("Subscribed!")
 
-
 def disconnected(client):
     print("Disconnected from the server!")
     sys.exit(1)
@@ -53,9 +52,10 @@ def message(client, feed_id, payload):
 
 try:
     ser = serial.Serial(port="COM4", baudrate=115200)
+    haveport = True
 except:
     print("Cannot open the port")
-    exit()
+    haveport = False
 
 def sendCommand(cmd):
     ser.write(cmd.encode())
@@ -75,11 +75,11 @@ def processData(data):
     print(splitData)
     if splitData[1] == "T":
         client.publish("Temp", splitData[2])
-        if float(splitData[2]) < 25:
+        if float(splitData[2]) < 5:
             infor("Too cold")
             sendCommand("4")
             infor(startAI())
-        elif float(splitData[2]) > 30:
+        elif float(splitData[2]) > 15:
             infor("Too hot")
             sendCommand("4")
             infor(startAI())
@@ -88,11 +88,11 @@ def processData(data):
     
     elif splitData[1] == "H":
         client.publish("Humid", splitData[2])
-        if float(splitData[2]) < 40:
+        if float(splitData[2]) < 75:
             infor("Too dry")
             sendCommand("2")
             infor(startAI())
-        elif float(splitData[2]) > 70:
+        elif float(splitData[2]) > 90:
             infor("Too humid")
             sendCommand("2")
             infor(startAI())
@@ -152,13 +152,20 @@ client.loop_background()
 
 client.publish("info", "Welcome!")
 
-speech_thread = threading.Thread(target=speech_recognition_loop)
+speech_thread = threading.Thread(target = speech_recognition_loop)
 speech_thread.start()
 
 while True:
-    # Execute requestData() without waiting for the speech thread to finish
-    a = requestData("0")  # temp
-    b = requestData("1")  # humid
-    # Join the speech thread, so the loop waits until the recognition is complete
-    speech_thread.join()
     time.sleep(2)
+    if haveport:
+        # Execute requestData() without waiting for the speech thread to finish
+        a = requestData("0")  # temp
+        b = requestData("1")  # humid
+        # Join the speech thread, so the loop waits until the recognition is complete
+        speech_thread.join() 
+    else: # testing without hardware, no breaching
+        x1 = random.randint(500, 1500) / 100
+        x2 = random.randint(7500, 9000) / 100
+        client.publish("Temp", x1)
+        client.publish("Humid", x2)
+    pass

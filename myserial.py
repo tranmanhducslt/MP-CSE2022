@@ -34,10 +34,3 @@ def readSerial(client):
                 mess = ""
             else:
                 mess = mess[end+1:]
-'''
-while True:
-    print("Testing commands")
-    for i in range(0, 6):
-        sendCommand(str(i))
-        time.sleep(2) # relay: switcher for low-power devices
-'''
