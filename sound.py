@@ -23,5 +23,5 @@ def recognize_speech():
 
     return recognized_text
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     recognize_speech()

@@ -12,7 +12,7 @@ import requests
 # import sensor
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_kRgJ02bLikKc36tFgZrH5uBJMROp"
+AIO_KEY = "aio_PaSU08kZS1YpXzPrDg5oIYe4TbVL"
 
 global_equation = "x1 + x2 + x3"
 
@@ -90,11 +90,11 @@ def processData(data):
     print(splitData)
     if splitData[1] == "T":
         client.publish("Temp", splitData[2])
-        if float(splitData[2]) < 25:
+        if float(splitData[2]) < 5:
             infor("Too cold")
             sendCommand("4")
             infor(startAI())
-        elif float(splitData[2]) > 30:
+        elif float(splitData[2]) > 15:
             infor("Too hot")
             sendCommand("4")
             infor(startAI())
@@ -103,11 +103,11 @@ def processData(data):
     
     elif splitData[1] == "H":
         client.publish("Humid", splitData[2])
-        if float(splitData[2]) < 40:
+        if float(splitData[2]) < 75:
             infor("Too dry")
             sendCommand("2")
             infor(startAI())
-        elif float(splitData[2]) > 70:
+        elif float(splitData[2]) > 90:
             infor("Too humid")
             sendCommand("2")
             infor(startAI())
@@ -157,8 +157,8 @@ while True:
         # Join the speech thread, so the loop waits until the recognition is complete
         speech_thread.join() 
     else: # testing without hardware, no breaching
-        x1 = random.randint(2500, 3000) / 100
-        x2 = random.randint(4000, 7000) / 100
+        x1 = random.randint(500, 1500) / 100
+        x2 = random.randint(7500, 9000) / 100
         client.publish("Temp", x1)
         client.publish("Humid", x2)
     pass
