@@ -3,7 +3,7 @@ import serial.tools.list_ports
 
 print("Sensors and Actuators")
 try:
-    ser = serial.Serial(port="COM3", baudrate=115200)
+    ser = serial.Serial(port="COM4", baudrate=115200) # Depends on chosen USB port
 except:
     print("Cannot open the port")
 

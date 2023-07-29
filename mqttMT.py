@@ -12,7 +12,7 @@ import requests
 # import sensor
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_uZci06oC3CN0qz92dj1tex8AujKB"
+AIO_KEY = "aio_kRgJ02bLikKc36tFgZrH5uBJMROp"
 
 global_equation = "x1 + x2 + x3"
 
@@ -40,20 +40,24 @@ def disconnected(client):
 def message(client, feed_id, payload):
     print("Received: " + payload)
     if feed_id == 'button-for-fan':
-        if payload == "1":
+        if recognized_text == "Fan on":
+            payload == "1"
             print("Turn on the device...")
             sendCommand("2")
             return
-        elif payload == "0":
+        elif recognized_text == "Fan off":
+            payload == "0"
             print('Turn off the device...')
             sendCommand("3")
             return
     if feed_id == 'button-for-light':
-        if payload == "1":
+        if recognized_text == "Light on":
+            payload == "1"
             print("Turn on the device...")
             sendCommand("4")
             return
-        elif payload == "0":
+        elif recognized_text == "Light off":
+            payload == "0"
             print('Turn off the device...')
             sendCommand("5")
             return
@@ -144,8 +148,14 @@ client.publish("info", "Welcome!")
 while True:
     time.sleep(2)
     if haveport:
+         # Start a new thread to run recognize_speech()
+        speech_thread = threading.Thread(target=recognize_speech)
+        speech_thread.start()
+        # recognized_text = recognize_speech()
         a = requestData("0") # temp
-        b = requestData("1") # humid    
+        b = requestData("1") # humid   
+        # Join the speech thread, so the loop waits until the recognition is complete
+        speech_thread.join() 
     else: # testing without hardware, no breaching
         x1 = random.randint(2500, 3000) / 100
         x2 = random.randint(4000, 7000) / 100
