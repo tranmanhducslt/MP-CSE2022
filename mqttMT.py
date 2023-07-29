@@ -14,14 +14,6 @@ import requests
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_PaSU08kZS1YpXzPrDg5oIYe4TbVL"
 
-global_equation = "x1 + x2 + x3"
-
-def init_global_equation():
-    headers = {}
-    aio_url = "https://io.adafruit.com/api/v2/multidisc2023/feeds/equation"
-    x = requests.get(url=aio_url, headers=headers, verify=False)
-    data = x.json()
-
 def connected(client):
     print("Server connected ...")
     client.subscribe("button-for-light")
@@ -142,7 +134,6 @@ client.on_subscribe = subscribe
 
 client.connect()
 client.loop_background()
-init_global_equation()
 
 client.publish("info", "Welcome!")
 while True:
