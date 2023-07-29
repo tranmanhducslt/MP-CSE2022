@@ -8,7 +8,7 @@ import serial.tools.list_ports
 import sys
 from Adafruit_IO import MQTTClient
 from AI import *
-from voice import *
+from sound import *
 import requests
 
 AIO_USERNAME = "multidisc2023"
