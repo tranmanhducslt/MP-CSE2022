@@ -2,6 +2,8 @@
 Just a team of 7 mortals making projects for the freshman year in Vietnamese-German University.
 
 # Activity
+2023.07. The great project for greenhouse crops.
+
 2023.06.07 A simple AI testing (webcam) photos to check for green backpacks.
 
 2023.06.23 Using Adafruit.io to create a dashboard with random numbers.
