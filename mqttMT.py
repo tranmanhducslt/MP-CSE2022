@@ -12,7 +12,7 @@ from AI import *
 from sound import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_JKpv83zodv4GZqhHZxRR583k2UIB"
+AIO_KEY = "aio_WWqu758Y2dR8fJKjCM7qAS5YHz8y"
 
 def connected(client):
     print("Server connected ...")
@@ -124,18 +124,19 @@ def speech_recognition_loop():
     global recognized_text
     while True:
         recognized_text = recognize_speech()
-        if recognized_text == "Fan on":
-            sendCommand("2")
-            return
-        elif recognized_text == "Fan off":
-            sendCommand("3")
-            return
-        if recognized_text == "Light on":
-            sendCommand("4")
-            return
-        elif recognized_text == "Light off":
-            sendCommand("5")
-            return
+        if recognized_text is not None:
+            if recognized_text == "Fan on":
+                sendCommand("2")
+                return
+            elif recognized_text == "Fan off":
+                sendCommand("3")
+                return
+            if recognized_text == "Light on":
+                sendCommand("4")
+                return
+            elif recognized_text == "Light off":
+                sendCommand("5")
+                return
         
 client = MQTTClient(AIO_USERNAME, AIO_KEY)
 
