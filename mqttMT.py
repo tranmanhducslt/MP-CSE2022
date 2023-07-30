@@ -6,10 +6,10 @@ import time
 import random
 import serial.tools.list_ports
 import sys
+import requests
 from Adafruit_IO import MQTTClient
 from AI import *
 from sound import *
-import requests
 
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_bRGL44VVBaPZBJLHcx7KcPi79ePs"
