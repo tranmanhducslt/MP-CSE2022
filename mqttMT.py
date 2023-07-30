@@ -12,7 +12,7 @@ from AI import *
 from sound import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_bRGL44VVBaPZBJLHcx7KcPi79ePs"
+AIO_KEY = "aio_JKpv83zodv4GZqhHZxRR583k2UIB"
 
 def connected(client):
     print("Server connected ...")
@@ -85,6 +85,7 @@ def processData(data):
             infor(startAI())
         else:
             sendCommand("5")
+            pass
     
     elif splitData[1] == "H":
         client.publish("Humid", splitData[2])
@@ -98,6 +99,7 @@ def processData(data):
             infor(startAI())
         else:
             sendCommand("3")
+            pass
 
 def readSerial():
     bytesToRead = ser.inWaiting()
@@ -118,12 +120,8 @@ def requestData(cmd):
     time.sleep(1)
     readSerial()
 
-def startAI():
-    cam_thread = threading.Thread(target=pre_startAI)
-    cam_thread.start()
-    cam_thread.join()
-
 def speech_recognition_loop():
+    global recognized_text
     while True:
         recognized_text = recognize_speech()
         if recognized_text == "Fan on":
@@ -138,8 +136,7 @@ def speech_recognition_loop():
         elif recognized_text == "Light off":
             sendCommand("5")
             return
-        print("You said: " + recognized_text)
-
+        
 client = MQTTClient(AIO_USERNAME, AIO_KEY)
 
 client.on_connect = connected
@@ -158,11 +155,9 @@ speech_thread.start()
 while True:
     time.sleep(2)
     if haveport:
-        # Execute requestData() without waiting for the speech thread to finish
+        # execute requestData() without waiting for the speech thread to finish
         a = requestData("0")  # temp
         b = requestData("1")  # humid
-        # Join the speech thread, so the loop waits until the recognition is complete
-        speech_thread.join() 
     else: # testing without hardware, no breaching
         x1 = random.randint(500, 1500) / 100
         x2 = random.randint(7500, 9000) / 100

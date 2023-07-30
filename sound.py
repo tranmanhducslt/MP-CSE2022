@@ -14,7 +14,6 @@ After that, execute the code below and you're good to go!
 
 '''
 recognized_text = None
-manual_activated = "Manual on"
 
 import speech_recognition as sr
 
@@ -25,7 +24,7 @@ def recognize_speech(manual = False):
     # Use the default microphone as the source
     with sr.Microphone() as source:
         print("Calibrating ambient noise. Please wait...")
-        recognizer.adjust_for_ambient_noise(source, duration=2)
+        recognizer.adjust_for_ambient_noise(source, duration = 2)
 
         print("Listening... Say something.")
         audio = recognizer.listen(source)
