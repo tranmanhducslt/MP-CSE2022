@@ -12,7 +12,7 @@ from AI import *
 from sound import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_WWqu758Y2dR8fJKjCM7qAS5YHz8y"
+AIO_KEY = "aio_WJQL56bDv1SLqKK01bq8YufQaTlO"
 
 def connected(client):
     print("Server connected ...")
@@ -123,11 +123,11 @@ def requestData(cmd):
 def speech_recognition_loop():
     global recognized_text
     while True:
-        recognized_text = recognize_speech()
-        if recognized_text is not None:
+        if recognize_speech() is not None:
+            recognized_text = recognize_speech()
             if recognized_text == "Fan on":
                 sendCommand("2")
-                return
+                return            
             elif recognized_text == "Fan off":
                 sendCommand("3")
                 return
