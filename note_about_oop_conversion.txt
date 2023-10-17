@@ -1,0 +1,1 @@
+Due to the required tasks for this project, mqttMT_oop.py is apt to be rewamped in near future. (This is just a note)
