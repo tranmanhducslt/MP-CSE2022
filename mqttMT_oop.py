@@ -4,8 +4,8 @@ import random
 import sys
 import serial.tools.list_ports
 from Adafruit_IO import MQTTClient
-from AI_oop import Camera
-from sound_oop import recognize_speech
+from AI_oop import *
+from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_WJQL56bDv1SLqKK01bq8YufQaTlO"
@@ -67,15 +67,16 @@ class AdafruitIO:
         split_data = data.split(":")
         print(split_data)
         if split_data[1] == "T":
+            cam = Camera()
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 5:
                 self.info("Too cold")
                 self.send_command("4")
-                self.info(startAI())
+                self.info(cam.startAI())
             elif float(split_data[2]) > 15:
                 self.info("Too hot")
                 self.send_command("4")
-                self.info(startAI())
+                self.info(cam.startAI())
             else:
                 self.send_command("5")
 
@@ -84,11 +85,11 @@ class AdafruitIO:
             if float(split_data[2]) < 75:
                 self.info("Too dry")
                 self.send_command("2")
-                self.info(startAI())
+                self.info(cam.startAI())
             elif float(split_data[2]) > 90:
                 self.info("Too humid")
                 self.send_command("2")
-                self.info(startAI())
+                self.info(cam.startAI())
             else:
                 self.send_command("3")
 
@@ -113,8 +114,9 @@ class AdafruitIO:
     def speech_recognition_loop(self):
         global recognized_text
         while True:
-            if recognize_speech() is not None:
-                recognized_text = recognize_speech()
+            speech_recognizer = SpeechRecognizer()
+            if speech_recognizer.recognize_speech() is not None:
+                recognized_text = speech_recognizer.recognize_speech()
                 if recognized_text == "Fan on":
                     self.send_command("2")
                     return
