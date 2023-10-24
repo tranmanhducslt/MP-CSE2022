@@ -4,8 +4,8 @@ import random
 import sys
 import serial.tools.list_ports
 from Adafruit_IO import MQTTClient
-from AI import Camera
-from sound import recognize_speech
+from AI_oop import Camera
+from sound_oop import recognize_speech
 
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_WJQL56bDv1SLqKK01bq8YufQaTlO"
