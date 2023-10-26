@@ -28,7 +28,7 @@ class Camera:
         if image is None:
             return 1
 
-        image = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
+        image = cv2.resize(image, (224, 224), interpolation = cv2.INTER_AREA)
         image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
         image = (image / 127.5) - 1
 
