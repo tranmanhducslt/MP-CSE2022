@@ -8,7 +8,7 @@ from AI_oop import *
 from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_tFLs50sDvzESfnMCx24MDJPlX6eP"
+AIO_KEY = "aio_XkKj27e3qwROBd81fj5oBXJkG9ap"
 
 class AdafruitIO:
     def __init__(self):
@@ -149,8 +149,8 @@ class AdafruitIO:
                 a = self.request_data("0")  # temp
                 b = self.request_data("1")  # humid
             else:
-                x1 = random.randint(500, 1500) / 100
-                x2 = random.randint(7500, 9000) / 100
+                x1 = random.randint(500, 1600) / 100
+                x2 = random.randint(7500, 9600) / 100
                 self.client.publish("Temp", x1)
                 self.client.publish("Humid", x2)
 
