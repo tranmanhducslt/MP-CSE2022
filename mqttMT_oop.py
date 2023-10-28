@@ -149,8 +149,8 @@ class AdafruitIO:
                 a = self.request_data("0")  # temp
                 b = self.request_data("1")  # humid
             else:
-                x1 = random.randint(500, 1600) / 100
-                x2 = random.randint(7500, 9600) / 100
+                x1 = random.randint(300, 1500) / 100
+                x2 = random.randint(7000, 9000) / 100
                 self.client.publish("Temp", x1)
                 self.client.publish("Humid", x2)
 
