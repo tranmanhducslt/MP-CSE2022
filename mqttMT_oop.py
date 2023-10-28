@@ -8,7 +8,7 @@ from AI_oop import *
 from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_XkKj27e3qwROBd81fj5oBXJkG9ap"
+AIO_KEY = "aio_HsSp80S8niaDmNVNSta5Nxb1KWlL"
 
 class AdafruitIO:
     def __init__(self):
@@ -149,17 +149,16 @@ class AdafruitIO:
                 a = self.request_data("0")  # temp
                 b = self.request_data("1")  # humid
             else:
-                x1 = random.randint(300, 1500) / 100
-                x2 = random.randint(7000, 9000) / 100
+                x1 = random.randint(500, 1500) / 100
+                x2 = random.randint(7500, 9000) / 100
                 self.client.publish("Temp", x1)
                 self.client.publish("Humid", x2)
 
-if __name__ == "__main__": #For testing purpose
+if __name__ == "__main__": # for testing purposes
     adafruit_io = AdafruitIO()
     try:
         ser = serial.Serial(port="COM4", baudrate=115200)
         adafruit_io.haveport = True
     except Exception as e:
         print("Cannot open the port:", e)
-
     adafruit_io.start()
