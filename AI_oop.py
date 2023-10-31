@@ -8,10 +8,15 @@ import sys
 np.set_printoptions(suppress=True)
 
 class Camera:
-    def __init__(self):
+    def __init__(self, typ):
         self.camera = None
-        self.model = load_model("keras_Model.h5", compile=False)
-        self.class_names = open("labels.txt", "r").readlines()
+        self.type = typ
+        if (typ == 0):
+            self.model = load_model("keras_model_0.h5", compile=False)
+            self.class_names = open("labels_0.txt", "r").readlines()
+        elif (typ == 1):
+            self.model = load_model("keras_model_1.h5", compile=False)
+            self.class_names = open("labels_1.txt", "r").readlines()
 
     def open_camera(self, camera_id=0):
         self.camera = cv2.VideoCapture(camera_id)
