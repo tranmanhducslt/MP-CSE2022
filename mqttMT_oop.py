@@ -150,7 +150,7 @@ class AdafruitIO:
                 a = self.request_data("0")  # temp
                 b = self.request_data("1")  # humid
             else:
-                cam = Camera(0) # 0 for farmer, 1 for plant
+                cam = Camera(1) # 0 for farmer, 1 for plant
                 self.info(cam.startAI())
                 x1 = random.randint(500, 1500) / 100
                 x2 = random.randint(7500, 9000) / 100
