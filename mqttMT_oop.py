@@ -67,7 +67,7 @@ class AdafruitIO:
         split_data = data.split(":")
         print(split_data)
         if split_data[1] == "T":
-            cam = Camera()
+            cam = Camera(0)
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 5:
                 self.info("Too cold")
@@ -81,6 +81,7 @@ class AdafruitIO:
                 self.send_command("5")
 
         elif split_data[1] == "H":
+            cam = Camera(0)
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 75:
                 self.info("Too dry")
@@ -149,7 +150,7 @@ class AdafruitIO:
                 a = self.request_data("0")  # temp
                 b = self.request_data("1")  # humid
             else:
-                cam = Camera()
+                cam = Camera(0) # 0 for farmer, 1 for plant
                 self.info(cam.startAI())
                 x1 = random.randint(500, 1500) / 100
                 x2 = random.randint(7500, 9000) / 100

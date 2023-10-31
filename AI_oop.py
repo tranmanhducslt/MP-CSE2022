@@ -65,5 +65,7 @@ class Camera:
             time.sleep(1/30)
 
 if __name__ == "__main__":
-    cam = Camera()
-    cam.startAI()
+    cam0 = Camera(0)
+    cam0.startAI()
+    cam1 = Camera(1)
+    cam1.startAI()
