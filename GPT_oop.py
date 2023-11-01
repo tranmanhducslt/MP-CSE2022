@@ -15,7 +15,7 @@ class GPT: # still trying to make it
         self.message_history.append({"role": self.role, "content": f"{self.user_input}"})
 
         array_exit = ["", "Bye ChatGPT", "Bye ChatGPT", "bye", "bye chat", "bye", "see you"]
-        if self.user_input in array_exit or not self.user_input:
+        if self.user_input in array_exit:
             return None
         
         completion = openai.ChatCompletion.create(
