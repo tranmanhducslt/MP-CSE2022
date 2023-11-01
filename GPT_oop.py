@@ -11,8 +11,8 @@ class GPT: # still trying to make it
         if len(self.message_history) >= 5:
             self.message_history.pop(0)
         self.user_input = input('User:')
-        self.message_history.append({'role': 'system', 'content': 'You are a helpful assistant.'})
-        self.message_history.append({"role": self.role, "content": f"{self.user_input}"})
+        self.message_history.update({'role': 'system', 'content': 'You are a helpful assistant.'})
+        self.message_history.update({"role": self.role, "content": f"{self.user_input}"})
 
         array_exit = ["", "Bye ChatGPT", "Bye ChatGPT", "bye", "bye chat", "bye", "see you"]
         if self.user_input in array_exit:
@@ -27,8 +27,8 @@ class GPT: # still trying to make it
         self.message_history.append({"role": "assistant", "content": f"{response}"})
         return response    
 
-    while True:
-        gpt = GPT()
-        gpt.conversation = generate_response(gpt.generate_response, role="user")
-        if gpt.conversation is None:
-            break
+while True:
+    gpt = GPT()
+    conversation = gpt.generate_response(role="user")
+    if conversation is None:
+        break
