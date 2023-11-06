@@ -8,10 +8,11 @@ from AI_oop import *
 from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_FQIo75oqerEWoCzfU5XBkKlo2x3W"
+AIO_KEY = "aio_GtMU94HwoBtKD8AgEi8X9E2Vc13A"
 
 class AdafruitIO:
     def __init__(self):
+        self.ser = serial.Serial(port="COM4", baudrate=115200)
         self.client = MQTTClient(AIO_USERNAME, AIO_KEY)
         self.haveport = False
         self.mess = ""
@@ -57,8 +58,13 @@ class AdafruitIO:
         print("Testing commands")
 
     def send_command(self, cmd):
+        try:
+            self.ser = serial.Serial(port="COM4", baudrate=115200)
+            adafruit_io.haveport = True
+        except Exception as e:
+            print("Cannot open the port:", e)
         if self.haveport:
-            ser.write(cmd.encode())
+            self.ser.write(cmd.encode())
 
     def info(self, message):
         if message is not None:
@@ -115,7 +121,7 @@ class AdafruitIO:
     def request_data(self, cmd):
         self.send_command(cmd)
         time.sleep(1)
-        self.read_serial()
+        self.read_serial(self.client)
 
     def speech_recognition_loop(self):
         while True:
@@ -183,10 +189,5 @@ class AdafruitIO:
 
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
-    try:
-        ser = serial.Serial(port="COM4", baudrate=115200)
-        adafruit_io.haveport = True
-    except Exception as e:
-        print("Cannot open the port:", e)
     adafruit_io.start()
         
