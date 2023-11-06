@@ -8,13 +8,18 @@ from AI_oop import *
 from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_zgXz72EjcLSQzTw5DI8E3ptBo4A6"
+AIO_KEY = "aio_FQIo75oqerEWoCzfU5XBkKlo2x3W"
 
 class AdafruitIO:
     def __init__(self):
         self.client = MQTTClient(AIO_USERNAME, AIO_KEY)
         self.haveport = False
         self.mess = ""
+        self.manual = False
+        self.speech_recognizer = SpeechRecognizer()
+        self.recognized_text = None
+        self.manual_text = None
+        self.condition = threading.Condition()  # Create a condition object
 
     def connected(self, client):
         print("Server connected ...")
@@ -94,14 +99,14 @@ class AdafruitIO:
             else:
                 self.send_command("3")
 
-    def read_serial(self):
-        bytes_to_read = ser.inWaiting()
+    def read_serial(self, client):
+        bytes_to_read = self.ser.inWaiting()
         if bytes_to_read > 0:
-            self.mess = self.mess + ser.read(bytes_to_read).decode("UTF-8")
+            self.mess = self.mess + self.ser.read(bytes_to_read).decode("UTF-8")
             while ("#" in self.mess) and ("!" in self.mess):
                 start = self.mess.find("!")
                 end = self.mess.find("#")
-                self.process_data(self.mess[start:end + 1])
+                self.process_data(self.mess[start:end + 1], client)
                 if end == len(self.mess):
                     self.mess = ""
                 else:
@@ -113,23 +118,38 @@ class AdafruitIO:
         self.read_serial()
 
     def speech_recognition_loop(self):
-        global recognized_text
         while True:
-            speech_recognizer = SpeechRecognizer()
-            if speech_recognizer.recognize_speech() is not None:
-                recognized_text = speech_recognizer.recognize_speech()
-                if recognized_text == "Fan on":
-                    self.send_command("2")
-                    return
-                elif recognized_text == "Fan off":
-                    self.send_command("3")
-                    return
-                if recognized_text == "Light on":
-                    self.send_command("4")
-                    return
-                elif recognized_text == "Light off":
-                    self.send_command("5")
-                    return
+            with self.condition:  # Acquire the condition lock
+                # Wait for the condition to be true (self.manual is False)
+                self.condition.wait_for(lambda: not self.manual)
+                # Do the speech recognition logic
+                if self.speech_recognizer.recognize_speech() is not None:
+                    self.recognized_text = self.speech_recognizer.recognize_speech()
+                    if self.recognized_text == "Fan on":
+                        self.send_command("2")
+                    elif self.recognized_text == "Fan off":
+                        self.send_command("3")
+                    elif self.recognized_text == "Light on":
+                        self.send_command("4")
+                    elif self.recognized_text == "Light off":
+                        self.send_command("5")
+                    elif self.recognized_text == "Manual off":
+                        self.manual = False
+                # Notify the other thread that the condition has changed
+                self.condition.notify()
+
+    def speech_manual_loop(self):
+        while True:
+            with self.condition:  # Acquire the condition lock
+                # Wait for the condition to be false (self.manual is True)
+                self.condition.wait_for(lambda: self.manual)
+                # Do the speech manual logic
+                if self.speech_recognizer.recognize_speech() is not None:
+                    self.manual_text = self.speech_recognizer.recognize_speech()
+                    if self.manual_text == "Manual on":
+                        self.manual = True
+                # Notify the other thread that the condition has changed
+                self.condition.notify()
 
     def start(self):
         self.client.on_connect = self.connected
@@ -141,23 +161,27 @@ class AdafruitIO:
 
         self.client.publish("info", "Welcome!")
 
-        speech_thread = threading.Thread(target=self.speech_recognition_loop)
-        speech_thread.start()
+        speech_recog_thread = threading.Thread(target=self.speech_recognition_loop)
+        speech_man_thread = threading.Thread(target=self.speech_manual_loop)
+        speech_recog_thread.start()
+        speech_man_thread.start()
 
         while True:
             time.sleep(2)
-            if self.haveport:
-                a = self.request_data("0")  # temp
-                b = self.request_data("1")  # humid
-            else:
-                cam = Camera(1) # 0 for farmer, 1 for plant
+            if self.haveport and not self.manual:
+                cam = Camera(1)  # 0 for farmer, 1 for plant
+                self.info(cam.startAI())
+                self.request_data("0")  # temp
+                self.request_data("1")  # humid
+            else:  # no ports plugged in
+                cam = Camera(1)
                 self.info(cam.startAI())
                 x1 = random.randint(500, 1500) / 100
                 x2 = random.randint(7500, 9000) / 100
                 self.client.publish("Temp", x1)
                 self.client.publish("Humid", x2)
 
-if __name__ == "__main__": # for testing purposes
+if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     try:
         ser = serial.Serial(port="COM4", baudrate=115200)
@@ -165,3 +189,4 @@ if __name__ == "__main__": # for testing purposes
     except Exception as e:
         print("Cannot open the port:", e)
     adafruit_io.start()
+        

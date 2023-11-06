@@ -34,7 +34,7 @@ class SpeechRecognizer:
         try:
             # Use Google Web Speech API to recognize the speech
             self.text = recognizer.recognize_google(audio)
-            print("You said:", self.recognized_text.capitalize())
+            print("You said:", self.text.capitalize())
         except sr.UnknownValueError:
             print("Sorry, I could not understand what you said.")
         except sr.RequestError as e:
