@@ -8,7 +8,7 @@ from AI_oop import *
 from sound_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_LkDV67960l70ySfNEeeEJAsdFug3"
+AIO_KEY = "aio_zgXz72EjcLSQzTw5DI8E3ptBo4A6"
 
 class AdafruitIO:
     def __init__(self):

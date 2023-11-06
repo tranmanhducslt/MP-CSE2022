@@ -17,7 +17,7 @@ import speech_recognition as sr
 
 class SpeechRecognizer:
     def __init__(self):
-        self.recognized_text = None
+        self.text = None
 
     def recognize_speech(self, manual=False):
         # Initialize the recognizer
@@ -33,14 +33,14 @@ class SpeechRecognizer:
 
         try:
             # Use Google Web Speech API to recognize the speech
-            self.recognized_text = recognizer.recognize_google(audio)
+            self.text = recognizer.recognize_google(audio)
             print("You said:", self.recognized_text.capitalize())
         except sr.UnknownValueError:
             print("Sorry, I could not understand what you said.")
         except sr.RequestError as e:
             print("Error occurred during the request to the Google Web Speech API:", e)
 
-        return self.recognized_text
+        return self.text
 
 if __name__ == "__main__":
     speech_recognizer = SpeechRecognizer()
