@@ -1,4 +1,4 @@
-import face_recognition #must install dlib first and then install face_recognition library
+import face_recognition # must install dlib first and then install face_recognition library
 import cv2
 import os
 import glob
@@ -53,7 +53,7 @@ class SimpleFacerec:
             matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
             name = "Unknown"
 
-            # # If a match was found in known_face_encodings, just use the first one.
+            # If a match was found in known_face_encodings, just use the first one.
             # if True in matches:
             #     first_match_index = matches.index(True)
             #     name = known_face_names[first_match_index]

@@ -152,7 +152,7 @@ class AdafruitIO:
 
         while True:
             time.sleep(2)
-            if self.check_port():
+            if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
             else:  # no ports plugged in
