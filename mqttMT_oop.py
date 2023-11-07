@@ -4,9 +4,9 @@ import random
 import sys
 import serial.tools.list_ports
 from Adafruit_IO import MQTTClient
-from GPT_oop import *
 from AI_oop import *
 from sound_oop import *
+from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_YzoF005DijV9bp82gO50GWsWr7T2"
@@ -152,7 +152,7 @@ class AdafruitIO:
 
         while True:
             time.sleep(2)
-            if self.haveport:
+            if self.check_port():
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
             else:  # no ports plugged in
