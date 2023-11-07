@@ -1,4 +1,4 @@
-import face_recognition
+import face_recognition #must install dlib first and then install face_recognition library
 import cv2
 import os
 import glob
