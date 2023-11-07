@@ -27,8 +27,6 @@ class GPT: # still trying to make it
         self.message_history.append({"role": "assistant", "content": f"{response}"})
         return response    
 
-while True:
+if __name__ == "__main__":
     gpt = GPT()
     conversation = gpt.generate_response(role="user")
-    if conversation is None:
-        break
