@@ -1,6 +1,6 @@
 import cv2
 from simple_facerec import *
-
+from mqttMT_oop import *
 # Encode faces from a folder
 sfr = SimpleFacerec()
 sfr.load_encoding_images("source code/images/")
