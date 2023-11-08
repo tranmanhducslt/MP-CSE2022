@@ -22,7 +22,8 @@ while True:
 
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1)
-    if key == 27:
+    if "Engineer" in face_names:
+        print("Found engineer")
         break
 cap.release()
 cv2.destroyAllWindows()

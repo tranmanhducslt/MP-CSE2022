@@ -164,7 +164,6 @@ class AdafruitIO:
         else:
             pass
 
-
     def start(self):
         self.client.on_connect = self.connected
         self.client.on_disconnect = self.disconnected
