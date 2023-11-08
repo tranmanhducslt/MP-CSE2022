@@ -9,12 +9,12 @@ from sound_oop import *
 from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_VSMW80yXBU9sYM6ZypObthy1tLRN"
+AIO_KEY = "aio_Qbaq60GpkjG4qBE7nsAxE0H1Upxa"
 
 class AdafruitIO:
     def __init__(self):
         self.ser = None
-        self.haveport = False
+        self.haveport = True
         self.client = MQTTClient(AIO_USERNAME, AIO_KEY)
         self.mess = ""
         self.speech_recognizer = SpeechRecognizer()
@@ -69,9 +69,7 @@ class AdafruitIO:
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 print("Speech recognition on...")
-                self.speech_recognizer.enable_recognition()
                 self.speech_recognition_loop()
-                self.speech_recognizer.disable_recognition()
                 print("You can turn it off now...")
                 time.sleep(3)
                 return
@@ -105,30 +103,24 @@ class AdafruitIO:
         split_data = data.split(":")
         print(split_data)
         if split_data[1] == "T":
-            cam = Camera(0)
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
                 self.info("Too cold")
                 self.send_command("4")
-                self.info(cam.startAI())
             elif float(split_data[2]) > 28:
                 self.info("Too hot")
                 self.send_command("4")
-                self.info(cam.startAI())
             else:
                 self.send_command("5")
 
         elif split_data[1] == "H":
-            cam = Camera(0)
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
                 self.info("Too dry")
                 self.send_command("1")
-                self.info(cam.startAI())
             elif float(split_data[2]) > 70:
                 self.info("Too humid")
                 self.send_command("1")
-                self.info(cam.startAI())
             else:
                 self.send_command("0")
 
@@ -179,9 +171,10 @@ class AdafruitIO:
             self.haveport = True
             print("Port found")
         except:
+            self.haveport = False
             print("Cannot open the port")
 
-        cam = Camera(1)
+        cam = Camera()
         cam.startAI()
 
         while True:

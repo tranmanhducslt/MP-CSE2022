@@ -8,9 +8,8 @@ import sys
 np.set_printoptions(suppress=True)
 
 class Camera:
-    def __init__(self, typ):
+    def __init__(self):
         self.camera = None
-        self.type = typ
         self.model = load_model("keras_model.h5", compile=False)
         self.class_names = open("labels.txt", "r").readlines()
 
@@ -61,7 +60,5 @@ class Camera:
             time.sleep(1/30)
 
 if __name__ == "__main__":
-    cam0 = Camera(0)
-    cam0.startAI()
-    cam1 = Camera(1)
+    cam1 = Camera()
     cam1.startAI()
