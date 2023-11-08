@@ -9,12 +9,12 @@ from sound_oop import *
 from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_iEgl61ZYLiOnJs0fAMQvG7FRrc05"
+AIO_KEY = "aio_oLII12LYN0K8QAyp57r4FlGp5igC"
 
 class AdafruitIO:
     def __init__(self):
         self.ser = None
-        self.haveport = True
+        self.haveport = False
         self.client = MQTTClient(AIO_USERNAME, AIO_KEY)
         self.mess = ""
         self.speech_recognizer = SpeechRecognizer()
@@ -26,6 +26,7 @@ class AdafruitIO:
         self.client.subscribe("button-for-light")
         self.client.subscribe("button-for-fan")
         self.client.subscribe("button-for-speech")
+        self.client.subscribe("button-for-sensor")
         self.client.subscribe("info")
 
     def subscribe(self, client, userdata, mid, granted_qos):
@@ -37,15 +38,6 @@ class AdafruitIO:
 
     def message(self, client, feed_id, payload):
         print("Received: " + payload)
-        if feed_id == 'button-for-fan':
-            if payload == "1":
-                print("Turn on the device...")
-                self.send_command("4")
-                return
-            elif payload == "0":
-                print('Turn off the device...')
-                self.send_command("5")
-                return
         if feed_id == 'button-for-light':
             if payload == "1":
                 print("Turn on the device...")
@@ -55,18 +47,38 @@ class AdafruitIO:
                 print('Turn off the device...')
                 self.send_command("0")
                 return
+        if feed_id == 'button-for-fan':
+            if payload == "1":
+                print("Turn on the device...")
+                self.send_command("4")
+                return
+            elif payload == "0":
+                print('Turn off the device...')
+                self.send_command("5")
+                return
+        if feed_id == 'button-for-sensor':
+            if payload == "1":
+                print("Turn on the device...")
+                self.send_command("2")
+                return
+            elif payload == "0":
+                print('Turn off the device...')
+                self.send_command("3")
+                return
         if feed_id == 'button-for-speech':
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 print("Speech recognition on...")
                 self.speech_recognizer.enable_recognition()
-                self.speech_recognition_loop(self.speech_enabled)
+                self.speech_recognition_loop()
                 self.speech_recognizer.disable_recognition()
                 print("You can turn it off now...")
                 time.sleep(3)
+                return
             elif payload == "0":
                 print('Speech recognition off...')
                 self.speech_enabled = False
+                return
     #    print("Testing commands")
     
     def check_port(self):
@@ -97,28 +109,28 @@ class AdafruitIO:
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
                 self.info("Too cold")
-                self.send_command("2")
+                self.send_command("4")
                 self.info(cam.startAI())
             elif float(split_data[2]) > 28:
                 self.info("Too hot")
-                self.send_command("2")
+                self.send_command("4")
                 self.info(cam.startAI())
             else:
-                self.send_command("3")
+                self.send_command("5")
 
         elif split_data[1] == "H":
             cam = Camera(0)
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
                 self.info("Too dry")
-                self.send_command("4")
+                self.send_command("1")
                 self.info(cam.startAI())
             elif float(split_data[2]) > 70:
                 self.info("Too humid")
-                self.send_command("4")
+                self.send_command("1")
                 self.info(cam.startAI())
             else:
-                self.send_command("5")
+                self.send_command("0")
 
     def read_serial(self, client):
         bytes_to_read = self.ser.inWaiting()
@@ -138,8 +150,8 @@ class AdafruitIO:
         time.sleep(1)
         self.read_serial(self.client)
 
-    def speech_recognition_loop(self, cond):
-        if self.speech_recognizer.recognize_speech() is not None and cond:
+    def speech_recognition_loop(self):
+        if self.speech_recognizer.recognize_speech() is not None:
             self.recognized_text = self.speech_recognizer.recognize_speech()
             if self.recognized_text == "Fan on":
                 self.send_command("2")
@@ -152,6 +164,7 @@ class AdafruitIO:
         else:
             pass
 
+
     def start(self):
         self.client.on_connect = self.connected
         self.client.on_disconnect = self.disconnected
@@ -161,17 +174,22 @@ class AdafruitIO:
         self.client.loop_background()
 
         self.client.publish("info", "Welcome!")
-        self.haveport = self.check_port()
+        
+        try:
+            self.ser = serial.Serial(port="COM4", baudrate=115200)
+            self.haveport = True
+            print("Port found")
+        except:
+            print("Cannot open the port")
 
         cam = Camera(1)
         cam.startAI()
-        
 
         while True:
             time.sleep(2)
             if self.haveport:
-                a = self.request_data("0")  # temp
-                b = self.request_data("1")  # humid
+                self.request_data("0")  # temp
+                self.request_data("1")  # humid
             else:  # no ports plugged in
                 x1 = random.randint(2600, 2800) / 100
                 x2 = random.randint(5000, 7000) / 100
@@ -181,3 +199,4 @@ class AdafruitIO:
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     adafruit_io.start()
+        
