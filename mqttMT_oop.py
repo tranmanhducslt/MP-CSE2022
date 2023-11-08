@@ -9,7 +9,7 @@ from sound_oop import *
 from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_YzoF005DijV9bp82gO50GWsWr7T2"
+AIO_KEY = "aio_rWfm04kdIf7vbg9mGQPfScm8FjzA"
 
 class AdafruitIO:
     def __init__(self):
@@ -148,11 +148,14 @@ class AdafruitIO:
         self.client.publish("info", "Welcome!")
 
         speech_recog_thread = threading.Thread(target=self.speech_recognition_loop)
-        speech_recog_thread.start
+        speech_recog_thread.start()
+        haveport = self.check_port()
+        cam = Camera(1)
+        cam.startAI()
 
         while True:
             time.sleep(2)
-            if self.check_port():
+            if haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
             else:  # no ports plugged in
