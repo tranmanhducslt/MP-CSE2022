@@ -9,7 +9,7 @@ from sound_oop import *
 from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_oLII12LYN0K8QAyp57r4FlGp5igC"
+AIO_KEY = "aio_VSMW80yXBU9sYM6ZypObthy1tLRN"
 
 class AdafruitIO:
     def __init__(self):
@@ -198,4 +198,3 @@ class AdafruitIO:
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     adafruit_io.start()
-        
