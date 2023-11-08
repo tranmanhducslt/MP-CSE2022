@@ -1,0 +1,13 @@
+scheduling
+	- run security
+	- check 26 <= temp. <= 28 and 50% <= humid <= 70%
+		Too cold/hot: Please in-/decrease temp. [at point?] after check
+		Too dry/humid: Please in-/decrease humid [at point?] after check
+	- detect plant
+		if green: increase fertilisers (macro-/micronutrient, 1 mL/5 L water), gradually increase brightness and light time, beware of algae
+		elif mixed: increase macro- 1 mL/10 L, decrease micro- 1 mL/20 L, increase brightness
+		elif white: keep as is
+	- chatbot: ask any question about plants/...
+	- 
+known problems
+	GPT steals other instances

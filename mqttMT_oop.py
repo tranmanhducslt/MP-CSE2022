@@ -9,7 +9,7 @@ from sound_oop import *
 from GPT_oop import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_rWfm04kdIf7vbg9mGQPfScm8FjzA"
+AIO_KEY = "aio_IWQt161r8Aytqn67cPer8415A08N"
 
 class AdafruitIO:
     def __init__(self):
@@ -80,11 +80,11 @@ class AdafruitIO:
         if split_data[1] == "T":
             cam = Camera(0)
             self.client.publish("Temp", split_data[2])
-            if float(split_data[2]) < 5:
+            if float(split_data[2]) < 26:
                 self.info("Too cold")
                 self.send_command("2")
                 self.info(cam.startAI())
-            elif float(split_data[2]) > 15:
+            elif float(split_data[2]) > 28:
                 self.info("Too hot")
                 self.send_command("2")
                 self.info(cam.startAI())
@@ -94,11 +94,11 @@ class AdafruitIO:
         elif split_data[1] == "H":
             cam = Camera(0)
             self.client.publish("Humid", split_data[2])
-            if float(split_data[2]) < 75:
+            if float(split_data[2]) < 50:
                 self.info("Too dry")
                 self.send_command("0")
                 self.info(cam.startAI())
-            elif float(split_data[2]) > 90:
+            elif float(split_data[2]) > 70:
                 self.info("Too humid")
                 self.send_command("0")
                 self.info(cam.startAI())
@@ -159,8 +159,8 @@ class AdafruitIO:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
             else:  # no ports plugged in
-                x1 = random.randint(500, 1500) / 100
-                x2 = random.randint(7500, 9000) / 100
+                x1 = random.randint(2600, 2800) / 100
+                x2 = random.randint(5000, 7000) / 100
                 self.client.publish("Temp", x1)
                 self.client.publish("Humid", x2)
 
