@@ -24,7 +24,7 @@ class AdafruitIO:
         self.recognized_text = ""
         self.speech_enabled = False
         self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
-        self.result = Nones
+        self.result = None
 
     def connected(self, c):
         print("Server connected ...")
