@@ -11,7 +11,7 @@ from GPT_oop import *
 from testfacedetect import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_hLzC22dfz8nTEf64wK7EmmMKGjJb"
+AIO_KEY = "aio_OBOh76HSCO4bdfdVvTYMAkCl9MlT"
 f_detect = True
 
 class AdafruitIO:
@@ -221,7 +221,7 @@ class AdafruitIO:
             time.sleep(3)'''
             cam = Camera()
             if cam.startAI():
-                self.info(Camera.engi_detect.message)
+                self.info(cam.message)
             if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid

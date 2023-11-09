@@ -10,7 +10,7 @@ class FaceRecognition:
 
     def initialize(self):
         self.sfr = SimpleFacerec()
-        self.sfr.load_encoding_images(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
+        self.sfr.load_encoding_images(r"facedetectfiles\images")
         return self.sfr
     
 
@@ -48,7 +48,7 @@ class FaceRecognition:
 
 
 if __name__ == "__main__":
-    encoding_images_path = r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images" #use your own computer's image path
+    encoding_images_path = r"facedetectfiles\images" #use your own computer's image path
     face_recognition = FaceRecognition(encoding_images_path)
 
     while True:
