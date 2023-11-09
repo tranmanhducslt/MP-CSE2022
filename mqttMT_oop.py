@@ -212,15 +212,15 @@ class AdafruitIO:
             print("Cannot open the port")
 
         while True:
-            '''global f_detect
+            global f_detect
             if f_detect:
                 self.face_detection_l()
                 f_detect = False
                 time.sleep(20)
                 cv2.destroyAllWindows()
-            time.sleep(3)'''
+            time.sleep(3)
             cam = Camera()
-            if cam.startAI():
+            if cam.message is not None:
                 self.info(cam.message)
             if self.haveport:
                 self.request_data("0")  # temp

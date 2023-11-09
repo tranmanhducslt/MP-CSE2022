@@ -1,5 +1,5 @@
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 model_id = 'gpt-3.5-turbo'
 
 class GPT: # still trying to make it
