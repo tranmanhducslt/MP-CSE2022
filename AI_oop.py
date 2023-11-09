@@ -12,8 +12,8 @@ np.set_printoptions(suppress=True)
 class Camera:
     def __init__(self):
         self.camera = None
-        self.model = load_model(r"keras_model.h5", compile=False)
-        self.class_names = open(r"labels.txt", "r").readlines()
+        self.model = load_model(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\keras_model_1.h5", compile=False)
+        self.class_names = open(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\labels_1.txt", "r").readlines()
         self.message = ""
 
     def open_camera(self, camera_id=1):
@@ -44,7 +44,7 @@ class Camera:
         print("Class:", class_name[2:], end="")
         print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
         
-        if confidence_score >= 0.6:
+        if confidence_score >= 0.8:
             if class_name[2:].strip() == 'Green':
                 self.message = "\nInstruction: \n\n+ Increase fertilisers (macro-/micronutrient, 1 mL/5 L water)\n+ Gradually increase brightness and light time\n+ Beware of algae\n"
             elif class_name[2:].strip() == 'Mixed':
@@ -53,7 +53,7 @@ class Camera:
             time.sleep(3)
             cv2.destroyAllWindows()  # Close any open OpenCV windows
             self.close_camera()
-            print("Closed.")
+            print("Plant's abnormality detected, please wait...")
             return 1
 
         keyboard_input = cv2.waitKey(1)
