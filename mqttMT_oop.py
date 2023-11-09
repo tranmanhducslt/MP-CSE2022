@@ -1,5 +1,6 @@
 import threading
 import time
+import datetime
 import random
 import sys
 import serial.tools.list_ports
@@ -10,7 +11,8 @@ from GPT_oop import *
 from testfacedetect import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_VSMW80yXBU9sYM6ZypObthy1tLRN"
+AIO_KEY = "aio_WxGV19DXtOXpqtsOCYdwKsmKF1Co"
+f_detect = True
 
 class AdafruitIO:
     def __init__(self):
@@ -19,15 +21,19 @@ class AdafruitIO:
         self.client = MQTTClient(AIO_USERNAME, AIO_KEY)
         self.mess = ""
         self.speech_recognizer = SpeechRecognizer()
-        self.recognized_text = None
+        self.recognized_text = ""
         self.speech_enabled = False
+        self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
+        self.result = None
+
 
     def connected(self, c):
         print("Server connected ...")
         self.client.subscribe("button-for-light")
         self.client.subscribe("button-for-fan")
         self.client.subscribe("button-for-speech")
-        self.client.subscribe("button-for-sensor")
+        self.client.subscribe("button-for-t-sensor")
+        self.client.subscribe("button-for-h-sensor")
         self.client.subscribe("info")
 
     def subscribe(self, client, userdata, mid, granted_qos):
@@ -57,22 +63,41 @@ class AdafruitIO:
                 print('Turn off the fan...')
                 self.send_command("5")
                 return
-        if feed_id == 'button-for-sensor':
+        if feed_id == 'button-for-t-sensor':
             if payload == "1":
-                print("Turn on the sensor...")
+                print("Turn on the temperature sensor...")
                 self.send_command("2")
+                print('Turning off...')
+                time.sleep(5)
+                self.client.publish("button-for-t-sensor", "0")
                 return
             elif payload == "0":
-                print('Turn off the sensor...')
+                pass
+        if feed_id == 'button-for-h-sensor':
+            if payload == "1":
+                print("Turn on the heat sensor...")
                 self.send_command("3")
+                print('Turning off...')
+                time.sleep(5)
+                self.client.publish("button-for-h-sensor", "0")
                 return
+            elif payload == "0":
+                pass
         if feed_id == 'button-for-speech':
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 print("Speech recognition on...")
-                self.speech_recognition_loop()
+                self.recognized_text = self.speech_recognizer.recognize_speech()
+                if str(self.recognized_text) == "Fan on":
+                    self.send_command("4")
+                elif str(self.recognized_text) == "Fan off":
+                    self.send_command("5")
+                elif str(self.recognized_text) == "Light on":
+                    self.send_command("1")
+                elif str(self.recognized_text) == "Light off":
+                    self.send_command("0")
                 print("You can turn it off now...")
-                time.sleep(3)
+                time.sleep(2)
                 return
             elif payload == "0":
                 print('Speech recognition off...')
@@ -98,30 +123,24 @@ class AdafruitIO:
         split_data = data.split(":")
         print(split_data)
         if split_data[1] == "T":
-            cam = Camera(0)
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
                 self.info("Too cold")
                 self.send_command("4")
-                self.info(cam.startAI())
             elif float(split_data[2]) > 28:
                 self.info("Too hot")
                 self.send_command("4")
-                self.info(cam.startAI())
             else:
                 self.send_command("5")
 
         elif split_data[1] == "H":
-            cam = Camera(0)
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
                 self.info("Too dry")
                 self.send_command("1")
-                self.info(cam.startAI())
             elif float(split_data[2]) > 70:
                 self.info("Too humid")
                 self.send_command("1")
-                self.info(cam.startAI())
             else:
                 self.send_command("0")
 
@@ -144,18 +163,45 @@ class AdafruitIO:
         self.read_serial(self.client)
 
     def speech_recognition_loop(self):
-        if self.speech_recognizer.recognize_speech() is not None:
-            self.recognized_text = self.speech_recognizer.recognize_speech()
-            if self.recognized_text == "Fan on":
-                self.send_command("4")
-            elif self.recognized_text == "Fan off":
-                self.send_command("5")
-            elif self.recognized_text == "Light on":
-                self.send_command("1")
-            elif self.recognized_text == "Light off":
-                self.send_command("0")
+        self.recognized_text = self.speech_recognizer.recognize_speech()
+        if str(self.recognized_text) == "Fan on":
+            self.send_command("4")
+        elif str(self.recognized_text) == "Fan off":
+            self.send_command("5")
+        elif str(self.recognized_text) == "Light on":
+            self.send_command("1")
+        elif str(self.recognized_text) == "Light off":
+            self.send_command("0")
+
+
+    def face_detection_l(self):
+        result = self.face_recognition.recognition()
+        time_detection = datetime.datetime.now()
+
+        if result == 'e':
+            starttime = datetime.datetime.now()
+            if (datetime.datetime.now() - starttime).total_seconds() == 2 and result == 'e':
+                self.client.publish("info", "Greetings, engineer!")
+            else:
+                print("Invalid detection.")
+
+
+        elif result == 's':
+            starttime = datetime.datetime.now()
+            if (datetime.datetime.now() - starttime).total_seconds() == 2 and result == 's':
+                self.client.publish("info", "No strangers intervened!")
+            else:
+                print("Invalid detection.")
+
+
         else:
-            pass
+            if (datetime.datetime.now() - time_detection).total_seconds() == 15: #if no one's detected on the camera within 20 seconds, the camera detection stops
+                print("No detection found.")
+
+
+        self.face_recognition.cap.release()
+        cv2.destroyAllWindows()
+
 
 
     def start(self):
@@ -166,9 +212,10 @@ class AdafruitIO:
         self.client.connect()
         self.client.loop_background()
 
+
         self.client.publish("info", "Welcome!")
-        self.client.publish("info", "No strangers allowed!")
         
+
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
             print("Port found")
@@ -176,22 +223,23 @@ class AdafruitIO:
             self.haveport = False
             print("Cannot open the port")
 
-        cam1 = Camera(1)
-        cam1.startAI()
 
         while True:
-            time.sleep(2)
+            global f_detect
+            if f_detect:
+                self.face_detection_l()
+                f_detect = False
+                time.sleep(20)
+                cv2.destroyAllWindows()
+            time.sleep(3)
+            cam = Camera()
+            if cam.startAI():
+                pass
             if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
+                time.sleep(1)
             else:  # no ports plugged in
-                if facedetect() == 'e':
-                    self.client.publish("info", "Greetings, engineer.")
-                elif facedetect() == 's':
-                    self.client.publish("info", "No strangers allowed!")
-                else:
-                    pass
-                time.sleep(30)
                 x1 = random.randint(2600, 2800) / 100
                 x2 = random.randint(5000, 7000) / 100
                 self.client.publish("Temp", x1)
