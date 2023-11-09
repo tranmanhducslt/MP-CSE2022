@@ -10,9 +10,11 @@ from sound_oop import *
 from GPT_oop import *
 from testfacedetect import *
 
+
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_OBOh76HSCO4bdfdVvTYMAkCl9MlT"
-f_detect = True
+AIO_KEY = "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"
+f_detect = False
+p_message = True
 
 class AdafruitIO:
     def __init__(self):
@@ -23,8 +25,10 @@ class AdafruitIO:
         self.speech_recognizer = SpeechRecognizer()
         self.recognized_text = ""
         self.speech_enabled = False
-        self.face_recognition = FaceRecognition(r"\facedetectfiles\images")
+        self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
         self.result = None
+        self.gpt = GPT()
+
 
     def connected(self, c):
         print("Server connected ...")
@@ -33,6 +37,7 @@ class AdafruitIO:
         self.client.subscribe("button-for-speech")
         self.client.subscribe("button-for-t-sensor")
         self.client.subscribe("button-for-h-sensor")
+        self.client.subscribe("button-for-gpt")
         self.client.subscribe("info")
 
     def subscribe(self, client, userdata, mid, granted_qos):
@@ -62,12 +67,23 @@ class AdafruitIO:
                 print('Turn off the fan...')
                 self.send_command("5")
                 return
+        if feed_id == 'button-for-gpt':
+            if payload == "1":
+                print("Turn on the chatbot...")
+                conversation = self.gpt.generate_response(role="user")
+                print(conversation)
+                time.sleep(2)
+                print('Turning off the chatbot...')
+                self.client.publish("button-for-t-sensor", "0")
+                return
+            elif payload == "0":
+                pass   
         if feed_id == 'button-for-t-sensor':
             if payload == "1":
                 print("Turn on the temperature sensor...")
                 self.send_command("2")
-                print('Turning off...')
-                time.sleep(5)
+                time.sleep(7)
+                print('Turning off the temperature sensor...')
                 self.client.publish("button-for-t-sensor", "0")
                 return
             elif payload == "0":
@@ -76,8 +92,8 @@ class AdafruitIO:
             if payload == "1":
                 print("Turn on the heat sensor...")
                 self.send_command("3")
-                print('Turning off...')
-                time.sleep(5)
+                time.sleep(7)
+                print('Turning off the heat sensor...')
                 self.client.publish("button-for-h-sensor", "0")
                 return
             elif payload == "0":
@@ -95,6 +111,8 @@ class AdafruitIO:
                     self.send_command("1")
                 elif str(self.recognized_text) == "Light off":
                     self.send_command("0")
+                else:
+                    print("Stupid AI")
                 print("You can turn it off now...")
                 time.sleep(2)
                 return
@@ -104,6 +122,8 @@ class AdafruitIO:
                 return
     #    print("Testing commands")
     
+
+
     def send_command(self, cmd):
         if self.haveport:
             self.ser.write(cmd.encode())
@@ -122,10 +142,10 @@ class AdafruitIO:
         if split_data[1] == "T":
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
-                self.info("Too cold - Please increase temperature to [26-28] Celsius after checking plant")
+                self.info("Too cold - Please increase temp. to [26-28] Celsius after checking plant")
                 self.send_command("4")
             elif float(split_data[2]) > 28:
-                self.info("Too hot - Please decrease temperature to [26-28] Celsius after checking plant")
+                self.info("Too hot - Please decrease temp. to [26-28] Celsius after checking plant")
                 self.send_command("4")
             else:
                 self.send_command("5")
@@ -133,10 +153,10 @@ class AdafruitIO:
         elif split_data[1] == "H":
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
-                self.info("Too dry - Please increase humidity to [50-70] per cent after checking plant")
+                self.info("Too dry - Please increase humid. to [50-70] per cent after checking plant")
                 self.send_command("1")
             elif float(split_data[2]) > 70:
-                self.info("Too humid - Please decrease humidity to [50-70] per cent after checking plant")
+                self.info("Too humid - Please decrease humid. to [50-70] per cent after checking plant")
                 self.send_command("1")
             else:
                 self.send_command("0")
@@ -159,41 +179,20 @@ class AdafruitIO:
         time.sleep(1)
         self.read_serial(self.client)
 
-    def speech_recognition_loop(self):
-        self.recognized_text = self.speech_recognizer.recognize_speech()
-        if str(self.recognized_text) == "Fan on":
-            self.send_command("4")
-        elif str(self.recognized_text) == "Fan off":
-            self.send_command("5")
-        elif str(self.recognized_text) == "Light on":
-            self.send_command("1")
-        elif str(self.recognized_text) == "Light off":
-            self.send_command("0")
 
     def face_detection_l(self):
-        result = self.face_recognition.recognition()
-        time_detection = datetime.datetime.now()
 
-        if result == 'e':
-            starttime = datetime.datetime.now()
-            if (datetime.datetime.now() - starttime).total_seconds() == 2 and result == 'e':
-                self.client.publish("info", "Greetings, engineer!")
-            else:
-                print("Invalid detection.")
+        if self.face_recognition.result == 'e':
+            self.client.publish("info", "Greetings, engineer!")
 
-        elif result == 's':
-            starttime = datetime.datetime.now()
-            if (datetime.datetime.now() - starttime).total_seconds() == 2 and result == 's':
-                self.client.publish("info", "No strangers intervened!")
-            else:
-                print("Invalid detection.")
+        elif self.face_recognition.result == 's':
+            self.client.publish("info", "No strangers intervened!")
 
         else:
-            if (datetime.datetime.now() - time_detection).total_seconds() == 15: #if no one's detected on the camera within 20 seconds, the camera detection stops
-                print("No detection found.")
+            self.client.publish("info", "No humans identified!")
 
-        self.face_recognition.cap.release()
-        cv2.destroyAllWindows()
+
+
 
     def start(self):
         self.client.on_connect = self.connected
@@ -202,8 +201,12 @@ class AdafruitIO:
         self.client.on_subscribe = self.subscribe
         self.client.connect()
         self.client.loop_background()
+
+
         self.client.publish("info", "Welcome!")
         
+        global f_detect, p_message
+
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
             print("Port found")
@@ -211,17 +214,21 @@ class AdafruitIO:
             self.haveport = False
             print("Cannot open the port")
 
+
         while True:
-            global f_detect
-            if f_detect:
+            self.face_recognition.start_human()
+            time.sleep(5)
+            if f_detect == False:
                 self.face_detection_l()
-                f_detect = False
-                time.sleep(20)
-                cv2.destroyAllWindows()
+                f_detect = True
             time.sleep(3)
             cam = Camera()
-            if cam.message is not None:
-                self.info(cam.message)
+            cam.startAI()
+            time.sleep(10)
+            if p_message:
+                if cam.message is not None and isinstance(cam.message, str):
+                    self.info(cam.message)
+                p_message = False
             if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
@@ -235,3 +242,4 @@ class AdafruitIO:
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     adafruit_io.start()
+        
