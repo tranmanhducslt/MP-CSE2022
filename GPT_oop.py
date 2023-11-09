@@ -1,5 +1,5 @@
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 model_id = 'gpt-3.5-turbo'
 
 class GPT: # still trying to make it
@@ -23,7 +23,7 @@ class GPT: # still trying to make it
             messages=self.message_history
         )
         response = completion.choices[0].message['content'].strip()
-        print(response)
+        #print(response)
         self.message_history.append({'role': "assistant", 'content': f"{response}"})
         return response    
 
