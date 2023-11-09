@@ -2,16 +2,27 @@ import cv2
 import time
 from facedetect_oop import SimpleFacerec
 
+hu_AI = True
+f_in = False
+
 class FaceRecognition:
     def __init__(self, encoding_images_path):
-        self.detected = False
         self.cap = None
-        self.sfr = None
+        self.sfr = SimpleFacerec()
+        self.result = 'n'
+        self.detected = False
 
     def initialize(self):
-        self.sfr = SimpleFacerec()
-        self.sfr.load_encoding_images(r"facedetectfiles\images")
+        self.sfr.load_encoding_images(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
         return self.sfr
+    
+    def open_cap(self, camera_id=0):
+        self.cap = cv2.VideoCapture(camera_id)
+
+    def close_cap(self):
+        if self.cap is not None:
+            self.cap.release()
+            self.cap = None
     
 
     def detect_faces(self, frame, sfr):
@@ -23,32 +34,54 @@ class FaceRecognition:
         return face_names
 
     def recognition(self):
-        sfr = self.initialize()
+        global f_in
+        while not self.detected:
+            if not f_in:
+                s = self.initialize()
+                f_in = True
 
-        self.cap = cv2.VideoCapture(0)
+            if self.cap is None:
+                break
 
-        ret, frame = self.cap.read()
-        face_names = self.detect_faces(frame, sfr)
-        cv2.imshow("Frame", frame)
+            ret, frame = self.cap.read()
 
-        key = cv2.waitKey(1)
-        
+            if not ret:
+                print("Error reading frame.")
+                break
 
-        if "Engineer" in face_names:
-            result = 'e'
-        elif "Stranger" in face_names:
-            result = 's'
-        elif "Thanh Khoi" in face_names:
-            result = 'k'
-        else:
-            result= 'n'
+            face_names = self.detect_faces(frame, s)
+            cv2.imshow("Frame", frame)
 
+            if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to exit
+                break
+                
 
-        return result
+            if "Engineer" in face_names:
+                cv2.destroyAllWindows()  # Close any open OpenCV windows
+                print("Please wait...")
+                self.result = 'e'
+                break
+
+            elif "Stranger" in face_names:
+                cv2.destroyAllWindows()  # Close any open OpenCV windows
+                print("Please wait...")
+                self.result = 's'
+                break
+
+        self.detected = True
+
+    
+    def start_human(self):
+        self.open_cap()
+        self.recognition()
+        self.close_cap()
+        time.sleep(1/30)
+
+        return 0
 
 
 if __name__ == "__main__":
-    encoding_images_path = r"facedetectfiles\images" #use your own computer's image path
+    encoding_images_path = r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images" #use your own computer's image path
     face_recognition = FaceRecognition(encoding_images_path)
 
     while True:
