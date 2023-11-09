@@ -1,6 +1,4 @@
-import threading
 import time
-import datetime
 import random
 import sys
 import serial.tools.list_ports
@@ -12,7 +10,7 @@ from testfacedetect import *
 
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "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"
+AIO_KEY = "aio_Jnfu88onqiwD1kTZNH7bQxOfsNfp "
 f_detect = False
 p_message = True
 
@@ -102,17 +100,15 @@ class AdafruitIO:
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 print("Speech recognition on...")
-                self.recognized_text = self.speech_recognizer.recognize_speech()
-                if str(self.recognized_text) == "Fan on":
+                self.recognized_text = self.speech_recognizer.recognize_speech().capitalize()
+                if self.recognized_text == "Fan on":
                     self.send_command("4")
-                elif str(self.recognized_text) == "Fan off":
+                elif self.recognized_text == "Fan off":
                     self.send_command("5")
-                elif str(self.recognized_text) == "Light on":
+                elif self.recognized_text == "Light on":
                     self.send_command("1")
-                elif str(self.recognized_text) == "Light off":
+                elif self.recognized_text == "Light off":
                     self.send_command("0")
-                else:
-                    print("Stupid AI")
                 print("You can turn it off now...")
                 time.sleep(2)
                 return
