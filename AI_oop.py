@@ -14,6 +14,7 @@ class Camera:
         self.camera = None
         self.model = load_model(r"keras_model.h5", compile=False)
         self.class_names = open(r"labels.txt", "r").readlines()
+        self.message = ""
 
     def open_camera(self, camera_id=1):
         self.camera = cv2.VideoCapture(camera_id)
@@ -45,9 +46,9 @@ class Camera:
         
         if confidence_score >= 0.6:
             if class_name[2:].strip() == 'Green':
-                print("\nInstruction: \n\n+ Increase fertilisers (macro-/micronutrient, 1 mL/5 L water)\n+ Gradually increase brightness and light time\n+ Beware of algae\n")
+                self.message = "\nInstruction: \n\n+ Increase fertilisers (macro-/micronutrient, 1 mL/5 L water)\n+ Gradually increase brightness and light time\n+ Beware of algae\n"
             elif class_name[2:].strip() == 'Mixed':
-                print("\nInstruction: \n\n+ Increase macro- 1 mL/10 L\n+ Decrease micro- 1 mL/20 L\n+ Increase brightness\n")
+                self.message = "\nInstruction: \n\n+ Increase macro- 1 mL/10 L\n+ Decrease micro- 1 mL/20 L\n+ Increase brightness\n"
             
             time.sleep(3)
             cv2.destroyAllWindows()  # Close any open OpenCV windows
