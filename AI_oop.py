@@ -12,8 +12,8 @@ np.set_printoptions(suppress=True)
 class Camera:
     def __init__(self):
         self.camera = None
-        self.model = load_model(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\keras_model_1.h5", compile=False)
-        self.class_names = open(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\labels_1.txt", "r").readlines()
+        self.model = load_model(r"keras_model.h5", compile=False)
+        self.class_names = open(r"labels.txt", "r").readlines()
 
     def open_camera(self, camera_id=1):
         self.camera = cv2.VideoCapture(camera_id)

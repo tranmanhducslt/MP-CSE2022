@@ -11,7 +11,7 @@ from GPT_oop import *
 from testfacedetect import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_WxGV19DXtOXpqtsOCYdwKsmKF1Co"
+AIO_KEY = "aio_hLzC22dfz8nTEf64wK7EmmMKGjJb"
 f_detect = True
 
 class AdafruitIO:
@@ -23,7 +23,7 @@ class AdafruitIO:
         self.speech_recognizer = SpeechRecognizer()
         self.recognized_text = ""
         self.speech_enabled = False
-        self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
+        self.face_recognition = FaceRecognition(r"\facedetectfiles\images")
         self.result = None
 
     def connected(self, c):
@@ -212,16 +212,16 @@ class AdafruitIO:
             print("Cannot open the port")
 
         while True:
-            global f_detect
+            '''global f_detect
             if f_detect:
                 self.face_detection_l()
                 f_detect = False
                 time.sleep(20)
                 cv2.destroyAllWindows()
-            time.sleep(3)
+            time.sleep(3)'''
             cam = Camera()
             if cam.startAI():
-                pass
+                self.info(Camera.engi_detect.message)
             if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
