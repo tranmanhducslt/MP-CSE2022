@@ -24,8 +24,7 @@ class AdafruitIO:
         self.recognized_text = ""
         self.speech_enabled = False
         self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
-        self.result = None
-
+        self.result = Nones
 
     def connected(self, c):
         print("Server connected ...")
@@ -105,8 +104,6 @@ class AdafruitIO:
                 return
     #    print("Testing commands")
     
-
-
     def send_command(self, cmd):
         if self.haveport:
             self.ser.write(cmd.encode())
@@ -173,7 +170,6 @@ class AdafruitIO:
         elif str(self.recognized_text) == "Light off":
             self.send_command("0")
 
-
     def face_detection_l(self):
         result = self.face_recognition.recognition()
         time_detection = datetime.datetime.now()
@@ -185,7 +181,6 @@ class AdafruitIO:
             else:
                 print("Invalid detection.")
 
-
         elif result == 's':
             starttime = datetime.datetime.now()
             if (datetime.datetime.now() - starttime).total_seconds() == 2 and result == 's':
@@ -193,16 +188,12 @@ class AdafruitIO:
             else:
                 print("Invalid detection.")
 
-
         else:
             if (datetime.datetime.now() - time_detection).total_seconds() == 15: #if no one's detected on the camera within 20 seconds, the camera detection stops
                 print("No detection found.")
 
-
         self.face_recognition.cap.release()
         cv2.destroyAllWindows()
-
-
 
     def start(self):
         self.client.on_connect = self.connected
@@ -211,18 +202,14 @@ class AdafruitIO:
         self.client.on_subscribe = self.subscribe
         self.client.connect()
         self.client.loop_background()
-
-
         self.client.publish("info", "Welcome!")
         
-
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
             print("Port found")
         except:
             self.haveport = False
             print("Cannot open the port")
-
 
         while True:
             global f_detect
@@ -248,4 +235,3 @@ class AdafruitIO:
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     adafruit_io.start()
-        
