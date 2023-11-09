@@ -125,10 +125,10 @@ class AdafruitIO:
         if split_data[1] == "T":
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
-                self.info("Too cold")
+                self.info("Too cold - Please increase temperature to [26-28] Celsius after checking plant")
                 self.send_command("4")
             elif float(split_data[2]) > 28:
-                self.info("Too hot")
+                self.info("Too hot - Please decrease temperature to [26-28] Celsius after checking plant")
                 self.send_command("4")
             else:
                 self.send_command("5")
@@ -136,10 +136,10 @@ class AdafruitIO:
         elif split_data[1] == "H":
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
-                self.info("Too dry")
+                self.info("Too dry - Please increase humidity to [50-70] per cent after checking plant")
                 self.send_command("1")
             elif float(split_data[2]) > 70:
-                self.info("Too humid")
+                self.info("Too humid - Please decrease humidity to [50-70] per cent after checking plant")
                 self.send_command("1")
             else:
                 self.send_command("0")
