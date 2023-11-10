@@ -10,7 +10,7 @@ from testfacedetect import *
 
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_Jnfu88onqiwD1kTZNH7bQxOfsNfp "
+AIO_KEY = "aio_NOWh88Gug33LwDPGbY6wAiCGPLj2"
 f_detect = False
 p_message = True
 
@@ -126,7 +126,6 @@ class AdafruitIO:
 
     def info(self, message):
         if message is not None:
-            print(message)
             self.client.publish("info", message)
 
     def process_data(self, data):
@@ -138,10 +137,10 @@ class AdafruitIO:
         if split_data[1] == "T":
             self.client.publish("Temp", split_data[2])
             if float(split_data[2]) < 26:
-                self.info("Too cold - Please increase temp. to [26-28] Celsius after checking plant")
+                self.client.publish("info", "Too cold - Please increase temp. to [26-28] Celsius after checking plant")
                 self.send_command("4")
             elif float(split_data[2]) > 28:
-                self.info("Too hot - Please decrease temp. to [26-28] Celsius after checking plant")
+                self.client.publish("info", "Too cold - Please decrease temp. to [26-28] Celsius after checking plant")
                 self.send_command("4")
             else:
                 self.send_command("5")
@@ -149,10 +148,10 @@ class AdafruitIO:
         elif split_data[1] == "H":
             self.client.publish("Humid", split_data[2])
             if float(split_data[2]) < 50:
-                self.info("Too dry - Please increase humid. to [50-70] per cent after checking plant")
+                self.client.publish("info", "Too dry - Please increase humid. to [50-70] per cent after checking plant")
                 self.send_command("1")
             elif float(split_data[2]) > 70:
-                self.info("Too humid - Please decrease humid. to [50-70] per cent after checking plant")
+                self.client.publish("info", "Too dry - Please decrease humid. to [50-70] per cent after checking plant")
                 self.send_command("1")
             else:
                 self.send_command("0")
@@ -213,14 +212,14 @@ class AdafruitIO:
 
         while True:
             self.face_recognition.start_human()
-            time.sleep(5)
+            time.sleep(3)
             if f_detect == False:
                 self.face_detection_l()
                 f_detect = True
-            time.sleep(3)
+            time.sleep(2)
             cam = Camera()
             cam.startAI()
-            time.sleep(10)
+            time.sleep(2)
             if p_message:
                 if cam.message is not None and isinstance(cam.message, str):
                     self.info(cam.message)
@@ -228,7 +227,6 @@ class AdafruitIO:
             if self.haveport:
                 self.request_data("0")  # temp
                 self.request_data("1")  # humid
-                time.sleep(1)
             else:  # no ports plugged in
                 x1 = random.randint(2600, 2800) / 100
                 x2 = random.randint(5000, 7000) / 100
