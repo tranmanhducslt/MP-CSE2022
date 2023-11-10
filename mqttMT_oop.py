@@ -10,7 +10,7 @@ from testfacedetect import *
 
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_NOWh88Gug33LwDPGbY6wAiCGPLj2"
+AIO_KEY = "aio_lPQa68n9hXogavxZB9VmgnkxrsW9"
 f_detect = False
 p_message = True
 
@@ -23,9 +23,10 @@ class AdafruitIO:
         self.speech_recognizer = SpeechRecognizer()
         self.recognized_text = ""
         self.speech_enabled = False
-        self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images")
+        self.face_recognition = FaceRecognition(r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\source code\images") #Use your own image folder path
         self.result = None
         self.gpt = GPT()
+        self.prohibited = False
 
 
     def connected(self, c):
@@ -37,6 +38,7 @@ class AdafruitIO:
         self.client.subscribe("button-for-h-sensor")
         self.client.subscribe("button-for-gpt")
         self.client.subscribe("info")
+
 
     def subscribe(self, client, userdata, mid, granted_qos):
         print("Subscribed!")
@@ -174,7 +176,6 @@ class AdafruitIO:
         time.sleep(1)
         self.read_serial(self.client)
 
-
     def face_detection_l(self):
 
         if self.face_recognition.result == 'e':
@@ -182,9 +183,13 @@ class AdafruitIO:
 
         elif self.face_recognition.result == 's':
             self.client.publish("info", "No strangers intervened!")
+            time.sleep(0.5)
+            sys.exit(1)
 
         else:
             self.client.publish("info", "No humans identified!")
+            time.sleep(0.5)
+            sys.exit(1)
 
 
 
@@ -216,10 +221,10 @@ class AdafruitIO:
             if f_detect == False:
                 self.face_detection_l()
                 f_detect = True
-            time.sleep(2)
+            time.sleep(1)
             cam = Camera()
             cam.startAI()
-            time.sleep(2)
+            time.sleep(1)
             if p_message:
                 if cam.message is not None and isinstance(cam.message, str):
                     self.info(cam.message)
