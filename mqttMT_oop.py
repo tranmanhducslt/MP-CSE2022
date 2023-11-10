@@ -8,7 +8,6 @@ from sound_oop import *
 from GPT_oop import *
 from testfacedetect import *
 
-
 AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_lPQa68n9hXogavxZB9VmgnkxrsW9"
 f_detect = False
@@ -28,7 +27,6 @@ class AdafruitIO:
         self.gpt = GPT()
         self.prohibited = False
 
-
     def connected(self, c):
         print("Server connected ...")
         self.client.subscribe("button-for-light")
@@ -38,7 +36,6 @@ class AdafruitIO:
         self.client.subscribe("button-for-h-sensor")
         self.client.subscribe("button-for-gpt")
         self.client.subscribe("info")
-
 
     def subscribe(self, client, userdata, mid, granted_qos):
         print("Subscribed!")
@@ -120,8 +117,6 @@ class AdafruitIO:
                 return
     #    print("Testing commands")
     
-
-
     def send_command(self, cmd):
         if self.haveport:
             self.ser.write(cmd.encode())
@@ -177,22 +172,16 @@ class AdafruitIO:
         self.read_serial(self.client)
 
     def face_detection_l(self):
-
         if self.face_recognition.result == 'e':
             print("Access granted.")
-
         elif self.face_recognition.result == 's':
             print("Access denied.")
             time.sleep(1)
             sys.exit(1)
-
         else:
             print("Access denied.")
             time.sleep(1)
             sys.exit(1)
-
-
-
 
     def start(self):
         self.client.on_connect = self.connected
@@ -210,10 +199,8 @@ class AdafruitIO:
         
         self.client.connect()
         self.client.loop_background()
-
-
+        
         self.client.publish("info", "Welcome, Engineer!")
-
 
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
@@ -221,7 +208,6 @@ class AdafruitIO:
         except:
             self.haveport = False
             print("Cannot open the port")
-
 
         while True:
             cam = Camera()
@@ -243,4 +229,3 @@ class AdafruitIO:
 if __name__ == "__main__":  # for testing purposes
     adafruit_io = AdafruitIO()
     adafruit_io.start()
-        
