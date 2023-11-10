@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>G15 UI check</title>
+        <link rel="stylesheet" href="style_ui.css">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['hours', 'humid(%)'],
+          ['3',  80],
+          ['6',  90],
+          ['9',  60],
+          ['12',  50],
+          ['15', 65],
+          ['18', 72],
+          ['21', 55],
+          ['24', 60]
+        ]);
+
+        var options = {
+          title: 'Humidity',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+  
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+            ['hours', 'Temperature(C)'],
+            ['3',  20],
+            ['6',  23],
+            ['9',  27],
+            ['12', 16],
+            ['15', 30],
+            ['18', 34],
+            ['21', 25],
+            ['24', 27]
+          ]);
+  
+          var options = {
+            title: 'Temperature',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+          };
+  
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+  
+          chart.draw(data, options);
+        }
+      </script>
+       <script type="text/javascript">
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(drawChart);
+  
+        function drawChart() {
+  
+          var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Humidity', 80],
+            ['Temperature', 20]
+          ]);
+  
+          var options = {
+            width: 400, height: 120,
+            redFrom: 90, redTo: 100,
+            yellowFrom:75, yellowTo: 90,
+            minorTicks: 5
+          };
+  
+          var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+  
+          chart.draw(data, options);
+  
+          setInterval(function() {
+            data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+            chart.draw(data, options);
+          }, 13000);
+          setInterval(function() {
+            data.setValue(1, 1, 15 + Math.round(20 * Math.random()));
+            chart.draw(data, options);
+          }, 5000);
+          setInterval(function() {
+            data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+            chart.draw(data, options);
+          }, 26000);
+        }
+      </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <nav class="navbar">
+                <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
+            </nav>
+        </div>
+        <div id="curve_chart1" class="chart1"></div>
+        <div id="curve_chart2" class="chart2"></div>
+        <div id="chart_div" class="chart3"></div>
+
+    </body>
+</html>
