@@ -37,13 +37,15 @@ class FaceRecognition:
         global f_in
         while not self.detected:
             if not f_in:
-                s = self.initialize()
+                s = self.initialize() #Lying within a condition to make sure this only runs once
                 f_in = True
 
             if self.cap is None:
                 break
 
             ret, frame = self.cap.read()
+            if frame is None:
+                break
 
             if not ret:
                 print("Error reading frame.")
@@ -58,13 +60,13 @@ class FaceRecognition:
 
             if "Engineer" in face_names:
                 cv2.destroyAllWindows()  # Close any open OpenCV windows
-                print("Please wait...")
+                print("Detected, please wait...")
                 self.result = 'e'
                 break
 
-            elif "Stranger" in face_names:
+            elif "Stranger" in face_names or "Quang Dung" in face_names:
                 cv2.destroyAllWindows()  # Close any open OpenCV windows
-                print("Please wait...")
+                print("Detected, please wait...")
                 self.result = 's'
                 break
 
@@ -76,7 +78,6 @@ class FaceRecognition:
         self.recognition()
         self.close_cap()
         time.sleep(1/30)
-
         return 0
 
 
