@@ -179,16 +179,16 @@ class AdafruitIO:
     def face_detection_l(self):
 
         if self.face_recognition.result == 'e':
-            self.client.publish("info", "Greetings, engineer!")
+            print("Access granted.")
 
         elif self.face_recognition.result == 's':
-            self.client.publish("info", "No strangers intervened!")
-            time.sleep(0.5)
+            print("Access denied.")
+            time.sleep(1)
             sys.exit(1)
 
         else:
-            self.client.publish("info", "No humans identified!")
-            time.sleep(0.5)
+            print("Access denied.")
+            time.sleep(1)
             sys.exit(1)
 
 
@@ -199,13 +199,21 @@ class AdafruitIO:
         self.client.on_disconnect = self.disconnected
         self.client.on_message = self.message
         self.client.on_subscribe = self.subscribe
+
+        global f_detect, p_message
+
+        self.face_recognition.start_human()
+        time.sleep(3)
+        if f_detect == False:
+            self.face_detection_l()
+            f_detect = True
+        
         self.client.connect()
         self.client.loop_background()
 
 
-        self.client.publish("info", "Welcome!")
-        
-        global f_detect, p_message
+        self.client.publish("info", "Welcome, Engineer!")
+
 
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
@@ -216,12 +224,6 @@ class AdafruitIO:
 
 
         while True:
-            self.face_recognition.start_human()
-            time.sleep(3)
-            if f_detect == False:
-                self.face_detection_l()
-                f_detect = True
-            time.sleep(1)
             cam = Camera()
             cam.startAI()
             time.sleep(1)
