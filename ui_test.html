@@ -7,6 +7,7 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="module">
           import data from './data.json' assert {type: 'json'};
+          var jsonData = data;
         </script>
         <!--
           IMPORTANT: JSON can't be imported without running the HTML in a server.
@@ -17,8 +18,7 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['hours', 'humid(%)'],
+        var r_data = [
           ['3',  80],
           ['6',  90],
           ['9',  60],
@@ -27,7 +27,8 @@
           ['18', 72],
           ['21', 55],
           ['24', 60]
-        ]);
+        ];
+        var data = google.visualization.arrayToDataTable([['hours', 'humid(%)']].concat(r_data));
 
         var options = {
           title: 'Humidity',
@@ -45,8 +46,7 @@
         google.charts.setOnLoadCallback(drawChart);
   
         function drawChart() {
-          var data = google.visualization.arrayToDataTable([
-            ['hours', 'Temperature(C)'],
+          var r_data = [
             ['3',  20],
             ['6',  23],
             ['9',  27],
@@ -55,7 +55,8 @@
             ['18', 34],
             ['21', 25],
             ['24', 27]
-          ]);
+          ];
+          var data = google.visualization.arrayToDataTable([['hours', 'Temperature(C)']].concat(r_data));
   
           var options = {
             title: 'Temperature',
@@ -105,6 +106,23 @@
           }, 26000);
         }
       </script>
+      <script type="module">
+        import data from './data.json' assert {type: 'json'};
+        var jsonData = data;
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        /*sleep(1000).then(() => {*/
+          document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
+          document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
+          document.getElementById("fan").innerHTML = "Fans: " + jsonData.fan;
+          document.getElementById("light").innerHTML = "Lights: " + jsonData.light;
+          document.getElementById("speech").innerHTML = "Speech recognition: " + jsonData.speech;
+          document.getElementById("gpt").innerHTML = "GPT: " + jsonData.gpt;
+          document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
+          /*document.getElementById("debug").innerHTML = document.getElementById("debug").innerHTML==0;
+        });*/
+      </script>
     </head>
     <body>
         <div class="wrapper">
@@ -115,6 +133,13 @@
         <div id="curve_chart1" class="chart1"></div>
         <div id="curve_chart2" class="chart2"></div>
         <div id="chart_div" class="chart3"></div>
-
+        <div id="t_sensor" class="text"></div>
+        <div id="h_sensor" class="text"></div>
+        <div id="fan" class="text"></div>
+        <div id="light" class="text"></div>
+        <div id="speech" class="text"></div>
+        <div id="gpt" class="text"></div>
+        <div id="info" class="text"></div>
+        <div id="debug" class="text"></div>
     </body>
 </html>
