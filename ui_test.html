@@ -5,6 +5,13 @@
         <title>G15 UI check</title>
         <link rel="stylesheet" href="style_ui.css">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="module">
+          import data from './data.json' assert {type: 'json'};
+        </script>
+        <!--
+          IMPORTANT: JSON can't be imported without running the HTML in a server.
+          To solve this, download the Live Server extension for the VSCode and then click "Go Live" at the bottom right corner of the window.
+        -->
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
@@ -15,7 +22,7 @@
           ['3',  80],
           ['6',  90],
           ['9',  60],
-          ['12',  50],
+          ['12', 50],
           ['15', 65],
           ['18', 72],
           ['21', 55],
