@@ -1,91 +1,97 @@
+<!--IMPORTANT: JS modules and JSON can't be imported without running the HTML in a server.
+To solve this, download the "Live Server" extension for the VSCode and then click "Go Live" at the bottom right corner of the window.-->
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>G15 UI check</title>
-        <link rel="stylesheet" href="style_ui.css">
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="module">
-          import data from './data.json' assert {type: 'json'};
-          var jsonData = data;
-        </script>
-        <!--
-          IMPORTANT: JSON can't be imported without running the HTML in a server.
-          To solve this, download the Live Server extension for the VSCode and then click "Go Live" at the bottom right corner of the window.
-        -->
-    <script type="text/javascript">
+  <head>
+    <meta charset="UTF-8">
+    <title>G15 UI check</title>
+    <link rel="stylesheet" href="style_ui.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="module">
+      import data from './data.json' assert {type: 'json'};
+      var jsonData = data;
+
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var r_data = [
-          ['3',  80],
-          ['6',  90],
-          ['9',  60],
-          ['12', 50],
-          ['15', 65],
-          ['18', 72],
-          ['21', 55],
-          ['24', 60]
-        ];
-        var data = google.visualization.arrayToDataTable([['hours', 'humid(%)']].concat(r_data));
+          var r_data = [
+              ['3',  80],
+              ['6',  90],
+              ['9',  60],
+              ['12', 50],
+              ['15', 65],
+              ['18', 72],
+              ['21', 55],
+              ['24', 60]
+          ];
+          var data = google.visualization.arrayToDataTable([['hours', 'humid(%)']].concat(r_data));
 
-        var options = {
-          title: 'Humidity',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
+          var options = {
+              title: 'Humidity',
+              curveType: 'function',
+              legend: { position: 'bottom' }
+          };
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
 
-        chart.draw(data, options);
+          chart.draw(data, options);
       }
     </script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
+
+    <script type="module">
+      import data from './data.json' assert {type: 'json'};
+      var jsonData = data;
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
   
-        function drawChart() {
+      function drawChart() {
           var r_data = [
-            ['3',  20],
-            ['6',  23],
-            ['9',  27],
-            ['12', 16],
-            ['15', 30],
-            ['18', 34],
-            ['21', 25],
-            ['24', 27]
+              ['3',  20],
+              ['6',  23],
+              ['9',  27],
+              ['12', 16],
+              ['15', 30],
+              ['18', 34],
+              ['21', 25],
+              ['24', 27]
           ];
           var data = google.visualization.arrayToDataTable([['hours', 'Temperature(C)']].concat(r_data));
   
           var options = {
-            title: 'Temperature',
-            curveType: 'function',
-            legend: { position: 'bottom' }
+              title: 'Temperature',
+              curveType: 'function',
+              legend: { position: 'bottom' }
           };
   
           var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
   
           chart.draw(data, options);
-        }
-      </script>
-       <script type="text/javascript">
-        google.charts.load('current', {'packages':['gauge']});
-        google.charts.setOnLoadCallback(drawChart);
+      }
+    </script>
+
+    <script type="module">
+      import data from './data.json' assert {type: 'json'};
+      var jsonData = data;
+
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
   
-        function drawChart() {
-  
-          var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['Humidity', 80],
-            ['Temperature', 20]
-          ]);
+      function drawChart() {
+          var r_data = [
+              ['Label', 'Value'],
+              ['Humidity', 80],
+              ['Temperature', 20]];
+          var data = google.visualization.arrayToDataTable(r_data);
   
           var options = {
-            width: 400, height: 120,
-            redFrom: 90, redTo: 100,
-            yellowFrom:75, yellowTo: 90,
-            minorTicks: 5
+              width: 400, height: 120,
+              redFrom: 90, redTo: 100,
+              yellowFrom:75, yellowTo: 90,
+              minorTicks: 5
           };
   
           var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
@@ -93,53 +99,54 @@
           chart.draw(data, options);
   
           setInterval(function() {
-            data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
-            chart.draw(data, options);
+              data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+              chart.draw(data, options);
           }, 13000);
           setInterval(function() {
-            data.setValue(1, 1, 15 + Math.round(20 * Math.random()));
-            chart.draw(data, options);
+              data.setValue(1, 1, 15 + Math.round(20 * Math.random()));
+              chart.draw(data, options);
           }, 5000);
           setInterval(function() {
-            data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
-            chart.draw(data, options);
+              data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+              chart.draw(data, options);
           }, 26000);
-        }
-      </script>
-      <script type="module">
-        import data from './data.json' assert {type: 'json'};
-        var jsonData = data;
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        /*sleep(1000).then(() => {*/
-          document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
-          document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
-          document.getElementById("fan").innerHTML = "Fans: " + jsonData.fan;
-          document.getElementById("light").innerHTML = "Lights: " + jsonData.light;
-          document.getElementById("speech").innerHTML = "Speech recognition: " + jsonData.speech;
-          document.getElementById("gpt").innerHTML = "GPT: " + jsonData.gpt;
-          document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
-          /*document.getElementById("debug").innerHTML = document.getElementById("debug").innerHTML==0;
-        });*/
-      </script>
-    </head>
-    <body>
-        <div class="wrapper">
-            <nav class="navbar">
-                <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
-            </nav>
-        </div>
-        <div id="curve_chart1" class="chart1"></div>
-        <div id="curve_chart2" class="chart2"></div>
-        <div id="chart_div" class="chart3"></div>
-        <div id="t_sensor" class="text"></div>
-        <div id="h_sensor" class="text"></div>
-        <div id="fan" class="text"></div>
-        <div id="light" class="text"></div>
-        <div id="speech" class="text"></div>
-        <div id="gpt" class="text"></div>
-        <div id="info" class="text"></div>
-        <div id="debug" class="text"></div>
-    </body>
+      }
+    </script>
+
+    <script type="module">
+      import data from './data.json' assert {type: 'json'};
+      var jsonData = data;
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      /*sleep(1000).then(() => {*/
+        document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
+        document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
+        document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
+        document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
+        document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
+        document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
+        document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
+        /*document.getElementById("debug").innerHTML = "debug";
+      });*/
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+        <nav class="navbar">
+            <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
+        </nav>
+    </div>
+    <div id="curve_chart1" class="chart1"></div>
+    <div id="curve_chart2" class="chart2"></div>
+    <div id="chart_div" class="chart3"></div>
+    <div id="t_sensor" class="text"></div>
+    <div id="h_sensor" class="text"></div>
+    <div id="fan" class="text"></div>
+    <div id="light" class="text"></div>
+    <div id="speech" class="text"></div>
+    <div id="gpt" class="text"></div>
+    <div id="info" class="text"></div>
+    <div id="debug" class="text"></div>
+  </body>
 </html>
