@@ -108,18 +108,17 @@
     </script>
     <script type="module">
         import data from './sensor_data.json' assert {type: 'json'};
-        var jsonData = data;
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
         sleep(1000).then(() => {
-            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
-            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
-            document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
-            document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
-            document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
-            document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
-            document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
+            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + data.t_sensor;
+            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + data.h_sensor;
+            document.getElementById("fan").innerHTML = "Fans switch: " + data.fan;
+            document.getElementById("light").innerHTML = "Lights switch: " + data.light;
+            document.getElementById("speech").innerHTML = "Speech recognition switch: " + data.speech;
+            document.getElementById("gpt").innerHTML = "GPT switch: " + data.gpt;
+            document.getElementById("info").innerHTML = "INFO: " + data.info;
         })
     </script>
 </body>
