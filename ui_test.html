@@ -63,11 +63,6 @@
             gaugeData.addRow(['Temperature', temperature]);
         }
 
-        function updateButtonStatus(status, buttonId) {
-            var button = document.getElementById(buttonId);
-            button.innerHTML = status === 1 ? 'ON' : 'OFF';
-        }
-
         function getChartOptions(title) {
             return {
                 title: title,
@@ -96,7 +91,6 @@
     <div id="curve_chart1" class="chart1"></div>
     <div id="curve_chart2" class="chart2"></div>
     <div id="chart_div" class="chart3"></div>
-    <div id="chart_div2" class="chart4"></div>
     <div id="t_sensor" class="text"></div>
     <div id="h_sensor" class="text"></div>
     <div id="fan" class="text"></div>
@@ -108,18 +102,13 @@
     </script>
     <script type="module">
         import data from './sensor_data.json' assert {type: 'json'};
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        sleep(1000).then(() => {
-            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + data.t_sensor;
-            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + data.h_sensor;
-            document.getElementById("fan").innerHTML = "Fans switch: " + data.fan;
-            document.getElementById("light").innerHTML = "Lights switch: " + data.light;
-            document.getElementById("speech").innerHTML = "Speech recognition switch: " + data.speech;
-            document.getElementById("gpt").innerHTML = "GPT switch: " + data.gpt;
-            document.getElementById("info").innerHTML = "INFO: " + data.info;
-        })
+        document.getElementById("t_sensor").innerHTML = "Temperature alert: " + data.t_sensor;
+        document.getElementById("h_sensor").innerHTML = "Humidity alert: " + data.h_sensor;
+        document.getElementById("fan").innerHTML = "Fans switch: " + data.fan;
+        document.getElementById("light").innerHTML = "Lights switch: " + data.light;
+        document.getElementById("speech").innerHTML = "Speech recognition switch: " + data.speech;
+        document.getElementById("gpt").innerHTML = "GPT switch: " + data.gpt;
+        document.getElementById("info").innerHTML = "INFO: " + data.info;
     </script>
 </body>
 </html>

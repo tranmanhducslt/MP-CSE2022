@@ -17,21 +17,13 @@
     height: 200px;
     width: 500px;
     z-index: -1;
-
 }
 .chart2{
     height: 200px;
     width: 500px;
     z-index: -1;
-
 }
 .chart3{
-
-    top: 100px;
-    right: 500px;
-    z-index: -1;
-}
-.chart4{
     top: 100px;
     right: 500px;
     z-index: -1;
