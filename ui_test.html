@@ -1,246 +1,147 @@
-<!--IMPORTANT: JS modules and JSON can't be imported without running the HTML in a server. To solve this:
-1. Download the "Live Server" extension for the VSCode.
-2. Make sure that the folder of the HTML file is open in VSCode.
-3. Click "Go Live" at the bottom right corner of the window while the HTML file is open.-->
-
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>G15 UI check</title>
     <link rel="stylesheet" href="style_ui.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-    <!-- humidity graph -->
     <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-          var r_data = [
-              ['3',  80],
-              ['6',  90],
-              ['9',  60],
-              ['12', 50],
-              ['15', 65],
-              ['18', 72],
-              ['21', 55],
-              ['24', 60]
-          ];
-          var data = google.visualization.arrayToDataTable([['hours', 'humid(%)']].concat(r_data));
-
-          var options = {
-              title: 'Humidity',
-              curveType: 'function',
-              legend: { position: 'bottom' }
-          };
-
-          var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
-
-          chart.draw(data, options);
-      }
-    </script>
+        google.charts.load('current', {'packages':['corechart', 'gauge']});
+        google.charts.setOnLoadCallback(() => {
+            initialize();
+            setInterval(updateCharts, 5000); // Update charts every 5 seconds (adjust as needed)
+        });
     
-    <!-- humidity graph -->
-    <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-          var r_data = [
-              ['3',  80],
-              ['6',  90],
-              ['9',  60],
-              ['12', 50],
-              ['15', 65],
-              ['18', 72],
-              ['21', 55],
-              ['24', 60]
-          ];
-          var data = google.visualization.arrayToDataTable([['hours', 'humid(%)']].concat(r_data));
-
-          var options = {
-              title: 'Humidity',
-              curveType: 'function',
-              legend: { position: 'bottom' }
-          };
-
-          var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
-
-          chart.draw(data, options);
-      }
-    </script>
-
-    <!-- temperature graph -->
-    <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-  
-      function drawChart() {
-          var r_data = [
-              ['3',  20],
-              ['6',  23],
-              ['9',  27],
-              ['12', 16],
-              ['15', 30],
-              ['18', 34],
-              ['21', 25],
-              ['24', 27]
-          ];
-          var data = google.visualization.arrayToDataTable([['hours', 'Temperature(C)']].concat(r_data));
-  
-          var options = {
-              title: 'Temperature',
-              curveType: 'function',
-              legend: { position: 'bottom' }
-          };
-  
-          var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
-  
-          chart.draw(data, options);
-      }
-    </script>
-           
-    <!-- humidity gauge -->
-    <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-
-      google.charts.load('current', {'packages':['gauge']});
-      google.charts.setOnLoadCallback(drawChart);
-  
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Humidity(%)', 80]
-        ]);
-  
-        var options = {
-          width: 400, height: 120,
-          yellowFrom: 90, yellowTo: 100,
-          redFrom: 0, redTo: 40,
-          minorTicks: 5, 
-        };
-  
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
-
-        chart.draw(data, options);
-  
-        /*setInterval(function() {*/
-          data.setValue(0, 1, jsonData.humidity);
-          chart.draw(data, options);
-        /*}, 13000);*/
-        
-      }
-    </script>
-
-    <!-- temperature gauge -->
-    <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-
-      google.charts.load('current', {'packages':['gauge']});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-  
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Temperature(C)', 20]
-        ]);
-
-        var options = {
-          width: 400, height: 120,
-          yellowFrom: 30, yellowTo: 35,
-          redFrom: 15, redTo: 20,
-          minorTicks: 10,
-          max: 35,
-          min: 15,
-                
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
-
-        chart.draw(data, options);
-
-        /*setInterval(function() {*/
-          data.setValue(0, 1, jsonData.temperature);
-          chart.draw(data, options)
-        /*}, 13000);*/
-            
-      }
-    </script>
-
-    <script type="module">
-      import data from './data.json' assert {type: 'json'};
-      var jsonData = data;
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-      /*sleep(1000).then(() => {*/
-        document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
-        document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
-        document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
-        document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
-        document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
-        document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
-        document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
-        /*document.getElementById("debug").innerHTML = "debug";
-      })*/
-    </script>
-  </head>
-  <body>
-    <div class="wrapper">
-      <nav class="navbar">
-        <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
-      </nav>
-    </div>
-      <div id="curve_chart1" class="chart1"></div>
-      <div id="curve_chart2" class="chart2"></div>
-      <div id="chart_div1" class="chart3"></div>
-      <div id="chart_div2" class="chart4"></div>
-      <div id="t_sensor" class="text"></div>
-      <div id="h_sensor" class="text"></div>
-      <div id="fan" class="text"></div>
-      <div id="light" class="text"></div>
-      <div id="speech" class="text"></div>
-      <div id="gpt" class="text"></div>
-      <div id="info" class="text"></div>
-      <!--<div id="debug" class="text"></div>
-      <p><button onclick="lightSwitch()">Light</button></p>
-      <div id="lightToggle">OFF</div>
-
-      <script>
-        function lightSwitch() {
-          var x = document.getElementById("lightToggle");
-          if (x.innerHTML === "OFF") {
-            x.innerHTML = "ON";
-          } else {
-            x.innerHTML = "OFF";
-          }
+        var humidityData, temperatureData, gaugeData;
+        var humidityChart, temperatureChart, gaugeChart;
+    
+        function initialize() {
+            initializeCharts();
         }
-      </script>
+    
+        function initializeCharts() {
+            humidityData = new google.visualization.DataTable();
+            humidityData.addColumn('string', 'Time');
+            humidityData.addColumn('number', 'Humidity(%)');
+            humidityChart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+    
+            temperatureData = new google.visualization.DataTable();
+            temperatureData.addColumn('string', 'Time');
+            temperatureData.addColumn('number', 'Temperature(C)');
+            temperatureChart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+    
+            gaugeData = new google.visualization.DataTable();
+            gaugeData.addColumn('string', 'Label');
+            gaugeData.addColumn('number', 'Value');
+            gaugeChart = new google.visualization.Gauge(document.getElementById('chart_div'));
+    
+            drawCharts();
+        }
+    
+        function drawCharts() {
+            // Fetch data asynchronously
+            fetch('./sensor_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    addDataPoint(humidityData, data.hu);
+                    addDataPoint(temperatureData, data.temp);
+                    updateGaugeData(data.hu, data.temp);
+    
+                    humidityChart.draw(humidityData, getChartOptions('Humidity'));
+                    temperatureChart.draw(temperatureData, getChartOptions('Temperature'));
+                    gaugeChart.draw(gaugeData, getGaugeOptions());
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
 
-      <p><button onclick="fanSwitch()">Fan</button></p>
-      <div id="fanToggle">OFF</div>
+        function updateCharts() {
+            // Fetch and update data asynchronously
+            fetch('./sensor_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    addDataPoint(humidityData, data.hu);
+                    addDataPoint(temperatureData, data.temp);
+                    updateGaugeData(data.hu, data.temp);
 
-      <script>
-        function fanSwitch() {
-          var x = document.getElementById("fanToggle");
-          if (x.innerHTML === "OFF") {
-            x.innerHTML = "ON";
-          } else {
-            x.innerHTML = "OFF";
-          }
-        }          
-      </script>-->
-    </body>
+                    humidityChart.draw(humidityData, getChartOptions('Humidity'));
+                    temperatureChart.draw(temperatureData, getChartOptions('Temperature'));
+                    gaugeChart.draw(gaugeData, getGaugeOptions());
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function addDataPoint(dataTable, value) {
+            var time = new Date();
+            var formattedTime = time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+            dataTable.addRow([formattedTime, value]);
+        }
+
+        function updateGaugeData(humidity, temperature) {
+            gaugeData.removeRows(0, gaugeData.getNumberOfRows());
+            gaugeData.addRow(['Humidity', humidity]);
+            gaugeData.addRow(['Temperature', temperature]);
+        }
+
+        function updateButtonStatus(status, buttonId) {
+            var button = document.getElementById(buttonId);
+            button.innerHTML = status === 1 ? 'ON' : 'OFF';
+        }
+
+        function getChartOptions(title) {
+            return {
+                title: title,
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+        }
+
+        function getGaugeOptions() {
+            return {
+                width: 400, height: 120,
+                redFrom: 90, redTo: 100,
+                yellowFrom:75, yellowTo: 90,
+                minorTicks: 5
+            };
+        }
+    </script>
+    </head>
+    <body>
+    <div class="wrapper">
+        <nav class="navbar">
+            <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
+        </nav>
+    </div>
+    <div id="curve_chart1" class="chart1"></div>
+    <div id="curve_chart2" class="chart2"></div>
+    <div id="chart_div" class="chart3"></div>
+    <div id="chart_div2" class="chart4"></div>
+    <div id="t_sensor" class="text"></div>
+    <div id="h_sensor" class="text"></div>
+    <div id="fan" class="text"></div>
+    <div id="light" class="text"></div>
+    <div id="speech" class="text"></div>
+    <div id="gpt" class="text"></div>
+    <div id="info" class="text"></div>
+    <div id="debug" class="text"></div>
+
+
+    </script>
+    <script type="module">
+        import data from './sensor_data.json' assert {type: 'json'};
+        var jsonData = data;
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        sleep(1000).then(() => {
+            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
+            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
+            document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
+            document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
+            document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
+            document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
+            document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
+            document.getElementById("debug").innerHTML = "debug";
+        })
+    </script>
+</body>
 </html>
