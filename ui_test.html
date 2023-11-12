@@ -85,8 +85,9 @@
             };
         }
     </script>
-    </head>
-    <body>
+</head>
+
+<body>
     <div class="wrapper">
         <nav class="navbar">
             <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
@@ -102,9 +103,7 @@
     <div id="light" class="text"></div>
     <div id="speech" class="text"></div>
     <div id="gpt" class="text"></div>
-    <div id="info" class="text"></div>
-    <div id="debug" class="text"></div>
-
+    <div id="info" class="text" style="max-width: 1000px;"></div>
 
     </script>
     <script type="module">
@@ -121,7 +120,6 @@
             document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
             document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
             document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
-            document.getElementById("debug").innerHTML = "debug";
         })
     </script>
 </body>

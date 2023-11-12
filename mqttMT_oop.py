@@ -15,7 +15,7 @@ f_detect = False
 p_message = True
 temp = 0
 hu = 0
-sensor_data = {"light": 0, "fan": 0, "gpt": 0, "t_sensor": 0, "h_sensor": 0, "speech": 0, "temperature": 0, "humidity": 0}
+sensor_data = {"light": 0, "fan": 0, "gpt": 0, "t_sensor": 0, "h_sensor": 0, "speech": 0, "temperature": 0, "humidity": 0, "info": ""}
 
 class AdafruitIO:
     def __init__(self):

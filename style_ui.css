@@ -36,3 +36,12 @@
     right: 500px;
     z-index: -1;
 }
+.text{
+    left: 470px;
+    bottom: 530px;
+    margin-top: 25px;
+    position: relative;
+    font-size: 20px;
+    border: 2px solid #0074cd;
+    max-width: 250px;
+}
