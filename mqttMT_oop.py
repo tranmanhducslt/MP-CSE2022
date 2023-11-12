@@ -16,12 +16,12 @@ p_message = True
 sensor_data = {
         "humidity": 0,
         "temperature": 0,
-        "t_sensor": "OFF",
-        "h_sensor": "OFF",
-        "fan": "OFF",
-        "light": "OFF",
-        "speech": "OFF",
-        "gpt": "OFF"
+        "t_sensor": 0,
+        "h_sensor": 0,
+        "fan": 0,
+        "light": 0,
+        "speech": 0,
+        "gpt": 0
 }
 class AdafruitIO:
     def __init__(self):
@@ -60,37 +60,37 @@ class AdafruitIO:
             if payload == "1":
                 print("Turn on the light...")
                 self.send_command("1")
-                sensor_data["light"] = "ON"
+                sensor_data["light"] = 1
                 self.write_to_json()
                 return
             elif payload == "0":
                 print('Turn off the light...')
                 self.send_command("0")
-                sensor_data["light"] = "OFF"
+                sensor_data["light"] = 0
                 self.write_to_json()
                 return
         if feed_id == 'button-for-fan':
             if payload == "1":
                 print("Turn on the fan...")
                 self.send_command("4")
-                sensor_data["fan"] = "ON"
+                sensor_data["fan"] = 1
                 self.write_to_json()
                 return
             elif payload == "0":
                 print('Turn off the fan...')
                 self.send_command("5")
-                sensor_data["fan"] = "OFF"
+                sensor_data["fan"] = 0
                 self.write_to_json()
                 return
         if feed_id == 'button-for-gpt':
             if payload == "1":
-                sensor_data["gpt"] = "ON"
+                sensor_data["gpt"] = 1
                 self.write_to_json()
                 print("Turn on the chatbot...")
                 conversation = self.gpt.generate_response(role="user")
                 print(conversation)
                 time.sleep(1)
-                sensor_data["gpt"] = "OFF"
+                sensor_data["gpt"] = 0
                 self.write_to_json()
                 print('Turning off the chatbot...')
                 self.client.publish("button-for-t-sensor", "0")
@@ -99,12 +99,12 @@ class AdafruitIO:
                 pass   
         if feed_id == 'button-for-t-sensor':
             if payload == "1":
-                sensor_data["t_sensor"] = "ON"
+                sensor_data["t_sensor"] = 1
                 self.write_to_json()
                 print("Turn on the temperature sensor...")
                 self.send_command("2")
                 time.sleep(7)
-                sensor_data["t_sensor"] = "OFF"
+                sensor_data["t_sensor"] = 0
                 self.write_to_json()
                 print('Turning off the temperature sensor...')
                 self.client.publish("button-for-t-sensor", "0")
@@ -113,12 +113,12 @@ class AdafruitIO:
                 pass
         if feed_id == 'button-for-h-sensor':
             if payload == "1":
-                sensor_data["h_sensor"] = "ON"
+                sensor_data["h_sensor"] = 1
                 self.write_to_json()
                 print("Turn on the heat sensor...")
                 self.send_command("3")
                 time.sleep(7)
-                sensor_data["h_sensor"] = "OFF"
+                sensor_data["h_sensor"] = 0
                 self.write_to_json()
                 print('Turning off the heat sensor...')
                 self.client.publish("button-for-h-sensor", "0")
@@ -128,7 +128,7 @@ class AdafruitIO:
         if feed_id == 'button-for-speech':
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
-                sensor_data["speech"] = "ON"
+                sensor_data["speech"] = 1
                 self.write_to_json()
                 print("Speech recognition on...")
                 self.recognized_text = self.speech_recognizer.recognize_speech().capitalize()
@@ -144,7 +144,7 @@ class AdafruitIO:
                 time.sleep(1)
                 return
             elif payload == "0":
-                sensor_data["speech"] = "OFF"
+                sensor_data["speech"] = 0
                 self.write_to_json()
                 print('Speech recognition off...')
                 self.speech_enabled = False
