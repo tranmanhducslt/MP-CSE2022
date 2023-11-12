@@ -59,8 +59,8 @@
 
         function updateGaugeData(humidity, temperature) {
             gaugeData.removeRows(0, gaugeData.getNumberOfRows());
-            gaugeData.addRow(['Humidity', humidity]);
-            gaugeData.addRow(['Temperature', temperature]);
+            gaugeData.addRow(['Humid(%)', humidity]);
+            gaugeData.addRow(['Temp(C)', temperature]);
         }
 
         function getChartOptions(title) {

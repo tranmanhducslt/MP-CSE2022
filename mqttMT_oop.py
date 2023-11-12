@@ -13,16 +13,8 @@ AIO_USERNAME = "multidisc2023"
 AIO_KEY = "aio_ralp78LSr2cQt4vZkZzF8G4sGmNa"
 f_detect = False
 p_message = True
-sensor_data = {
-        "humidity": 0,
-        "temperature": 0,
-        "t_sensor": 0,
-        "h_sensor": 0,
-        "fan": 0,
-        "light": 0,
-        "speech": 0,
-        "gpt": 0
-}
+with open("sensor_data.json", mode="r", encoding="utf-8") as file:
+    sensor_data = json.load(file)
 class AdafruitIO:
     def __init__(self):
         self.ser = None
@@ -199,7 +191,7 @@ class AdafruitIO:
         global sensor_data
         file_path = r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\sensor_data.json"
 
-        with open(file_path, "w") as json_file:
+        with open(file_path, mode="w") as json_file:
             json.dump(sensor_data, json_file)
 
     def read_serial(self, client):

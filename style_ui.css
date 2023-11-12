@@ -1,15 +1,15 @@
 *{
     padding: 0;
     margin: 0;
+    font-family: Verdana, sans-serif;
 }
 .wrapper{
-    background: url(greenhouse.jpeg) no-repeat;
+    background: url(greenhouse.jpg) no-repeat;
     background-size: cover;
     z-index: 1;
-
 }
 .navbar{
-    height: 80px;
+    height: 60px;
     width: 100%;
     background: rgba(0, 0, 0, 0.4);
 }
