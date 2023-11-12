@@ -40,9 +40,9 @@
             fetch('./sensor_data.json')
                 .then(response => response.json())
                 .then(data => {
-                    addDataPoint(humidityData, data.hu);
-                    addDataPoint(temperatureData, data.temp);
-                    updateGaugeData(data.hu, data.temp);
+                    addDataPoint(humidityData, data.humidity);
+                    addDataPoint(temperatureData, data.temperature);
+                    updateGaugeData(data.humidity, data.temperature);
     
                     humidityChart.draw(humidityData, getChartOptions('Humidity'));
                     temperatureChart.draw(temperatureData, getChartOptions('Temperature'));
