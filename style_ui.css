@@ -17,17 +17,22 @@
     height: 200px;
     width: 500px;
     z-index: -1;
+
 }
 .chart2{
     height: 200px;
     width: 500px;
     z-index: -1;
+
 }
 .chart3{
-    position: fixed;
+
     top: 100px;
     right: 500px;
+    z-index: -1;
 }
-.text{
-    margin-left: 30px;
+.chart4{
+    top: 100px;
+    right: 500px;
+    z-index: -1;
 }
