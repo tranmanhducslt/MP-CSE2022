@@ -10,11 +10,22 @@ from GPT_oop import *
 from testfacedetect import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_ralp78LSr2cQt4vZkZzF8G4sGmNa"
+AIO_KEY = "aio_gvzt90aWvg0cdFlK3i0lKos5lzK4"
 f_detect = False
 p_message = True
-with open("sensor_data.json", mode="r", encoding="utf-8") as file:
-    sensor_data = json.load(file)
+
+sensor_data = {
+        "humidity": 0,
+        "temperature": 0,
+        "t_sensor": 0,
+        "h_sensor": 0,
+        "fan": 0,
+        "light": 0,
+        "speech": 0,
+        "gpt": 0,
+        "info": "",
+    }
+
 class AdafruitIO:
     def __init__(self):
         self.ser = None
@@ -38,6 +49,10 @@ class AdafruitIO:
         self.client.subscribe("button-for-h-sensor")
         self.client.subscribe("button-for-gpt")
         self.client.subscribe("info")
+
+    def published(self, string):
+        self.client.publish("info", string)
+        sensor_data["info"] = string
 
     def subscribe(self, client, userdata, mid, granted_qos):
         print("Subscribed!")
@@ -121,7 +136,6 @@ class AdafruitIO:
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 sensor_data["speech"] = 1
-                self.write_to_json()
                 print("Speech recognition on...")
                 self.recognized_text = self.speech_recognizer.recognize_speech().capitalize()
                 if self.recognized_text == "Fan on":
@@ -137,7 +151,6 @@ class AdafruitIO:
                 return
             elif payload == "0":
                 sensor_data["speech"] = 0
-                self.write_to_json()
                 print('Speech recognition off...')
                 self.speech_enabled = False
                 return
@@ -162,12 +175,13 @@ class AdafruitIO:
             temp = split_data[2]
             self.client.publish("Temp", split_data[2])
             sensor_data["temperature"] = float(split_data[2])
-            self.write_to_json()
             if float(split_data[2]) < 26:
-                self.client.publish("info", "Too cold - Please increase temp. to [26-28] Celsius after checking plant")
+                self.published("Too cold - Please increase temp. to [26-28] Celsius after checking plant")
+                self.write_to_json()
                 self.send_command("4")
             elif float(split_data[2]) > 28:
-                self.client.publish("info", "Too hot - Please decrease temp. to [26-28] Celsius after checking plant")
+                self.published("Too hot - Please decrease temp. to [26-28] Celsius after checking plant")
+                self.write_to_json()
                 self.send_command("4")
             else:
                 self.send_command("5")
@@ -175,24 +189,23 @@ class AdafruitIO:
         elif split_data[1] == "H":
             hu = split_data[2]
             self.client.publish("Humid", split_data[2])
-            sensor_data["humid"] = float(split_data[2])
-            self.write_to_json()
+            sensor_data["humidity"] = float(split_data[2])  # Change to "humidity" key
             if float(split_data[2]) < 50:
-                self.client.publish("info", "Too dry - Please increase humid. to [50-70] per cent after checking plant")
+                self.published("Too dry - Please increase humid. to [50-70] per cent after checking plant")
+                self.write_to_json()
                 self.send_command("1")
             elif float(split_data[2]) > 70:
-                self.client.publish("info", "Too humid - Please decrease humid. to [50-70] per cent after checking plant")
+                self.published("Too humid - Please decrease humid. to [50-70] per cent after checking plant")
+                self.write_to_json()
                 self.send_command("1")
             else:
                 self.send_command("0")
 
-
     def write_to_json(self):
-        global sensor_data
         file_path = r"C:\Users\Minecrap\Desktop\MP-CSE2022-main\sensor_data.json"
 
-        with open(file_path, mode="w") as json_file:
-            json.dump(sensor_data, json_file)
+        with open(file_path, "w") as json_file:
+            json.dump(sensor_data, json_file, indent = 4)
 
     def read_serial(self, client):
         bytes_to_read = self.ser.inWaiting()
@@ -242,7 +255,8 @@ class AdafruitIO:
         self.client.connect()
         self.client.loop_background()
         
-        self.client.publish("info", "Welcome, Engineer!")
+        self.published("Welcome, Engineer!")
+        self.write_to_json()
 
         try:
             self.ser = serial.Serial(port="COM4", baudrate=115200)
@@ -257,7 +271,8 @@ class AdafruitIO:
             time.sleep(1)
             if p_message:
                 if cam.message is not None and isinstance(cam.message, str):
-                    self.info(cam.message)
+                    self.published(cam.message)
+                    self.write_to_json()
                 p_message = False
             if self.haveport:
                 self.request_data("0")  # temp
