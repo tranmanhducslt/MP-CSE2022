@@ -136,6 +136,7 @@ class AdafruitIO:
             if payload == "1" and not self.speech_enabled:
                 self.speech_enabled = True
                 sensor_data["speech"] = 1
+                self.write_to_json()
                 print("Speech recognition on...")
                 self.recognized_text = self.speech_recognizer.recognize_speech().capitalize()
                 if self.recognized_text == "Fan on":
@@ -151,6 +152,7 @@ class AdafruitIO:
                 return
             elif payload == "0":
                 sensor_data["speech"] = 0
+                self.write_to_json()
                 print('Speech recognition off...')
                 self.speech_enabled = False
                 return
@@ -175,6 +177,7 @@ class AdafruitIO:
             temp = split_data[2]
             self.client.publish("Temp", split_data[2])
             sensor_data["temperature"] = float(split_data[2])
+            self.write_to_json()
             if float(split_data[2]) < 26:
                 self.published("Too cold - Please increase temp. to [26-28] Celsius after checking plant")
                 self.write_to_json()
@@ -190,6 +193,7 @@ class AdafruitIO:
             hu = split_data[2]
             self.client.publish("Humid", split_data[2])
             sensor_data["humidity"] = float(split_data[2])  # Change to "humidity" key
+            self.write_to_json()
             if float(split_data[2]) < 50:
                 self.published("Too dry - Please increase humid. to [50-70] per cent after checking plant")
                 self.write_to_json()
