@@ -10,7 +10,7 @@ from GPT_oop import *
 from testfacedetect import *
 
 AIO_USERNAME = "multidisc2023"
-AIO_KEY = "aio_gvzt90aWvg0cdFlK3i0lKos5lzK4"
+AIO_KEY = "aio_cMuH25ko8yVFcwDsmw7QoDeXuVUD"
 f_detect = False
 p_message = True
 
@@ -140,22 +140,26 @@ class AdafruitIO:
                 print("Speech recognition on...")
                 self.recognized_text = self.speech_recognizer.recognize_speech().capitalize()
                 if self.recognized_text == "Fan on":
+                    self.client.publish("button-for-fan", "1")
                     self.send_command("4")
                 elif self.recognized_text == "Fan off":
+                    self.client.publish("button-for-fan", "0")
                     self.send_command("5")
                 elif self.recognized_text == "Light on":
+                    self.client.publish("button-for-light", "1")
                     self.send_command("1")
                 elif self.recognized_text == "Light off":
+                    self.client.publish("button-for-light", "0")
                     self.send_command("0")
-                print("You can turn it off now...")
-                time.sleep(1)
-                return
-            elif payload == "0":
+                print("Turning the speed recognition off...")
+                time.sleep(0.25,)
                 sensor_data["speech"] = 0
                 self.write_to_json()
                 print('Speech recognition off...')
                 self.speech_enabled = False
                 return
+            elif payload == "0":
+                pass
     #    print("Testing commands")
     
     def send_command(self, cmd):
