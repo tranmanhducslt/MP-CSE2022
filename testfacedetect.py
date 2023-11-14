@@ -60,13 +60,13 @@ class FaceRecognition:
 
             if "Engineer" in face_names:
                 cv2.destroyAllWindows()  # Close any open OpenCV windows
-                print("Detected, please wait...")
+                print("Human detected, please wait...")
                 self.result = 'e'
                 break
 
-            elif "Stranger" in face_names or "Quang Dung" in face_names:
+            elif "Stranger" in face_names:
                 cv2.destroyAllWindows()  # Close any open OpenCV windows
-                print("Detected, please wait...")
+                print("Human detected, please wait...")
                 self.result = 's'
                 break
 
