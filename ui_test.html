@@ -1,3 +1,8 @@
+<!--IMPORTANT: JS modules and JSON can't be imported without running the HTML in a server. To solve this:
+1. Download the "Live Server" extension for the VSCode.
+2. Make sure that the folder of the HTML file is open in VSCode.
+3. Click "Go Live" at the bottom right corner of the window while the HTML file is open.-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,7 +118,7 @@
     <div id="speech" class="text"></div>
     <div id="gpt" class="text"></div>
     <div id="info" class="text"></div>
-    <div id="debug" class="text"></div>
+    <!--<div id="debug" class="text"></div>-->
 
 
     </script>
@@ -131,7 +136,7 @@
             document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
             document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
             document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
-            document.getElementById("debug").innerHTML = "debug";
+            //document.getElementById("debug").innerHTML = "debug";
         })
     </script>
 </body>
