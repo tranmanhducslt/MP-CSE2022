@@ -118,26 +118,19 @@
     <div id="speech" class="text"></div>
     <div id="gpt" class="text"></div>
     <div id="info" class="text"></div>
-    <!--<div id="debug" class="text"></div>-->
 
 
     </script>
     <script type="module">
         import data from './sensor_data.json' assert {type: 'json'};
         var jsonData = data;
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        sleep(1000).then(() => {
-            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
-            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
-            document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
-            document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
-            document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
-            document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
-            document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
-            //document.getElementById("debug").innerHTML = "debug";
-        })
+        document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
+        document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
+        document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
+        document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
+        document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
+        document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
+        document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
     </script>
 </body>
 </html>
