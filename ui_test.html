@@ -2,53 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>G15 UI check</title>
+    <title>PLANT CARE - G15</title>
     <link rel="stylesheet" href="style_ui.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="module">
         google.charts.load('current', {'packages':['corechart', 'gauge']});
         google.charts.setOnLoadCallback(initialize);
-    
+
         var humidityData, temperatureData, gaugeData;
         var humidityChart, temperatureChart, gaugeChart;
-    
+
         function initialize() {
             initializeCharts();
             updateCharts(); // Update charts immediately on page load
             setInterval(updateCharts, 5000); // Update charts every 5 seconds (adjust as needed)
         }
-    
+
         function initializeCharts() {
             humidityData = new google.visualization.DataTable();
             humidityData.addColumn('string', 'Time');
             humidityData.addColumn('number', 'Humidity(%)');
             humidityChart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
-    
+
             temperatureData = new google.visualization.DataTable();
             temperatureData.addColumn('string', 'Time');
             temperatureData.addColumn('number', 'Temperature(C)');
             temperatureChart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
-    
+
             gaugeData = new google.visualization.DataTable();
             gaugeData.addColumn('string', 'Label');
             gaugeData.addColumn('number', 'Value');
             gaugeChart = new google.visualization.Gauge(document.getElementById('chart_div'));
         }
-    
+
         function updateCharts() {
-            // Fetch data asynchronously
-            fetch('./sensor_data.json')
-                .then(response => response.json())
-                .then(data => {
+            // Fetch data asynchronously using AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
                     addDataPoint(humidityData, data.humidity);
                     addDataPoint(temperatureData, data.temperature);
                     updateGaugeData(data.humidity, data.temperature);
-    
+
+                    var numDataPoints = humidityData.getNumberOfRows();
+                    var hAxisMax = numDataPoints > 10 ? numDataPoints : 10; // Set a minimum value if there are fewer than 10 data points
+
                     humidityChart.draw(humidityData, getChartOptions('Humidity'));
                     temperatureChart.draw(temperatureData, getChartOptions('Temperature'));
                     gaugeChart.draw(gaugeData, getGaugeOptions());
-                })
-                .catch(error => console.error('Error fetching data:', error));
+                }
+            };
+            xhr.open('GET', './sensor_data.json', true);
+            xhr.send();
         }
 
         function addDataPoint(dataTable, value) {
@@ -59,15 +65,24 @@
 
         function updateGaugeData(humidity, temperature) {
             gaugeData.removeRows(0, gaugeData.getNumberOfRows());
-            gaugeData.addRow(['Humid(%)', humidity]);
-            gaugeData.addRow(['Temp(C)', temperature]);
+            gaugeData.addRow(['Humidity', humidity]);
+            gaugeData.addRow(['Temperature', temperature]);
         }
+
 
         function getChartOptions(title) {
             return {
                 title: title,
                 curveType: 'function',
-                legend: { position: 'bottom' }
+                legend: { position: 'bottom' },
+                vAxis: {
+                    title: 'Percentage',
+                    viewWindow: {
+                        min: 0,
+                        max: 100
+                    },
+                    ticks: [0, 20, 40, 60, 80, 100] // Adjust ticks as needed
+                },                                                                                                                                                                                                                                                                               
             };
         }
 
@@ -81,34 +96,43 @@
         }
     </script>
 </head>
-
-<body>
+    <body>
     <div class="wrapper">
         <nav class="navbar">
-            <h1 style="color: azure; font-size: 300%; text-align: center;">GREENHOUSE MANAGEMENT</h1>
+            <h1 style="color: azure; font-size: 300%; text-align: center;">PLANT CARE</h1>
         </nav>
     </div>
     <div id="curve_chart1" class="chart1"></div>
     <div id="curve_chart2" class="chart2"></div>
     <div id="chart_div" class="chart3"></div>
+    <div id="chart_div2" class="chart4"></div>
     <div id="t_sensor" class="text"></div>
     <div id="h_sensor" class="text"></div>
     <div id="fan" class="text"></div>
     <div id="light" class="text"></div>
     <div id="speech" class="text"></div>
     <div id="gpt" class="text"></div>
-    <div id="info" class="text" style="max-width: 1000px;"></div>
+    <div id="info" class="text"></div>
+    <div id="debug" class="text"></div>
+
 
     </script>
     <script type="module">
         import data from './sensor_data.json' assert {type: 'json'};
-        document.getElementById("t_sensor").innerHTML = "Temperature alert: " + data.t_sensor;
-        document.getElementById("h_sensor").innerHTML = "Humidity alert: " + data.h_sensor;
-        document.getElementById("fan").innerHTML = "Fans switch: " + data.fan;
-        document.getElementById("light").innerHTML = "Lights switch: " + data.light;
-        document.getElementById("speech").innerHTML = "Speech recognition switch: " + data.speech;
-        document.getElementById("gpt").innerHTML = "GPT switch: " + data.gpt;
-        document.getElementById("info").innerHTML = "INFO: " + data.info;
+        var jsonData = data;
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        sleep(1000).then(() => {
+            document.getElementById("t_sensor").innerHTML = "Temperature alert: " + jsonData.t_sensor;
+            document.getElementById("h_sensor").innerHTML = "Humidity alert: " + jsonData.h_sensor;
+            document.getElementById("fan").innerHTML = "Fans switch: " + jsonData.fan;
+            document.getElementById("light").innerHTML = "Lights switch: " + jsonData.light;
+            document.getElementById("speech").innerHTML = "Speech recognition switch: " + jsonData.speech;
+            document.getElementById("gpt").innerHTML = "GPT switch: " + jsonData.gpt;
+            document.getElementById("info").innerHTML = "INFO: " + jsonData.info;
+            document.getElementById("debug").innerHTML = "debug";
+        })
     </script>
 </body>
 </html>
